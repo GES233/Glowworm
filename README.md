@@ -2,7 +2,7 @@
 
 Simple PoC of neural simulation model.
 
-> **wraning**
+> **warning**
 >
 > This is just a model to verify feasibility and may be deprecated at any time.
 
@@ -10,7 +10,7 @@ Simple PoC of neural simulation model.
 
 Recording of idea: [Interactive testbed for cortical modeling? - Elixir Framework Forums / Nx Forum - Elixir Programming Language Forum](https://elixirforum.com/t/interactive-testbed-for-cortical-modeling/61178/3)
 
-Simulation of neuron references [amiryt/Erlang-project](https://github.com/amiryt/Erlang-project), and hierarchical architecture inspired by [ThousandIsland](https://github.com/mtrudel/thousand_island).
+Simulation of neuron references amiryt's [Erlang-project](https://github.com/amiryt/Erlang-project), and hierarchical architecture inspired by [ThousandIsland](https://github.com/mtrudel/thousand_island).
 
 Architecture of application like following graph:
 
