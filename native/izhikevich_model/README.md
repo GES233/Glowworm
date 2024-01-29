@@ -1,5 +1,9 @@
 # NIF for Elixir.Glowworm.Models.Izhikevich
 
+*Simulating Izhikevich model with RK4*.
+
+---
+
 ## To build the NIF module:
 
 - Your NIF will now build along with your project.

@@ -1,3 +1,5 @@
 defmodule Glowworm.Models do
-  @callback next_tick() :: any()
+  @type status :: map() | struct()
+  @type param :: map() | struct()
+  @callback nextstep(status, param) :: status
 end
