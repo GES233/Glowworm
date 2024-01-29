@@ -24,3 +24,11 @@ glowworm-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+## Native related
+# Cargo
+/native/**/Cargo.lock
+
+# Output
+/priv/native/*.so
+/priv/native/*.dll
