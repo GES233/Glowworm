@@ -1,4 +1,4 @@
-defmodule Glowworn.Runner do
+defmodule Glowworn.NeuronRunner do
   use Task
 
   def start_link(args), do: Task.start_link(__MODULE__, :run, args)

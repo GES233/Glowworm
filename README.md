@@ -31,6 +31,7 @@ Architecture of application like following graph:
                              |
                          +--------+
                          | Runner |
+                         | (diff) |
                          |  Task  |
                          +--------+
                              |
