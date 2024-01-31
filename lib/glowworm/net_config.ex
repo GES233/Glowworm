@@ -1,6 +1,6 @@
 defmodule Glowworm.NetConfig do
   defstruct [
-    runner_model: Glowworn.Models.LIF,
+    runner_model: Glowworn.Models.Izhikecivh,
     num_neurons: 64
   ]
 
