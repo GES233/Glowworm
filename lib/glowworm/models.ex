@@ -1,5 +1,6 @@
 defmodule Glowworm.Models do
   @type status :: map() | struct()
   @type param :: map() | struct()
-  @callback nextstep(status, param) :: {status, atom() | nil}
+  @type input :: map() | struct()
+  @callback nextstep(param, status, input) :: {status, atom() | nil}
 end

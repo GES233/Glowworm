@@ -1,4 +1,4 @@
-defmodule Glowworm.Models.Izhikevich.NeuroState do
+defmodule Glowworm.Models.Izhikevich.NeuronState do
   @type t :: %__MODULE__{
     potential: number(),
     recovery: number(),
@@ -8,7 +8,8 @@ end
 
 defmodule Glowworm.Models.Izhikevich.InputState do
   @type t :: %__MODULE__{
-    current: number()
+    current: number(),
+    counter: integer(),
   }
-  defstruct [:current]
+  defstruct [:current, :counter]
 end

@@ -20,7 +20,7 @@ defmodule Glowworm.Models.Izhikevich.Param do
   * `d` - The parameter `d` describes after-spike reset of the recovery variable
   `u` caused by slow high-threshold Na+ and K+ conductance.
 
-  Excepet above, has `peak_threshold` field to set the threshold of reset.
+  Except above, has `peak_threshold` field to set the threshold of reset.
 
   ### Simulation
 
