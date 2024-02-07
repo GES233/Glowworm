@@ -23,7 +23,6 @@ struct NeuronState {
 #[module = "Glowworm.Models.Izhikevich.InputState"]
 struct InputState {
     pub current: f64,
-    pub counter: u8,
 }
 
 mod event_atom {
@@ -33,10 +32,17 @@ mod event_atom {
     }
 }
 
+#[derive(Debug, NifStruct)]
+#[module = "Glowworm.Models.Izhikevich.RunnerState"]
+struct RunnerState {
+  pub event: Atom,
+  pub counter: u8,
+}
+
 #[derive(NifTuple)]
 struct NifResult {
-    pub state: NeuronState,
-    pub event: Atom,
+    pub neuron: NeuronState,
+    pub runner: RunnerState,
 }
 
 fn dv(v: f64, u: f64, i: f64) -> f64 {
@@ -74,7 +80,7 @@ fn update(_v: f64, u: f64, c: f64, d: f64) -> (f64, f64) {
 */
 
 #[rustler::nif]
-fn nextstep(param: Param, state: NeuronState, input: InputState) -> NifResult {
+fn nextstep(param: Param, state: NeuronState, input: InputState, runner: RunnerState) -> NifResult {
     // 0. Parse param
     let current: (f64, f64) = (state.potential, state.recovery);
     let current_i: f64 = input.current;
@@ -124,15 +130,18 @@ fn nextstep(param: Param, state: NeuronState, input: InputState) -> NifResult {
         (next_potential, next_recovery) = update(next_potential, next_recovery, param.c, param.d);
         event = event_atom::pulse();
     }
-    let _next_counter: u8 = input.counter + 1;
+    let next_counter: u8 = runner.counter + 1;
 
     NifResult {
-        state: NeuronState{
+        neuron: NeuronState{
             potential: next_potential,
             recovery: next_recovery,
             // TODO: Add counter
         },
-        event: event,
+        runner: RunnerState{
+            event: event,
+            counter: next_counter
+        }
     }
 }
 
