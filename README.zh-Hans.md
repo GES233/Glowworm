@@ -24,3 +24,8 @@ graph TD
   Models["模型（通常用 NIF 实现）"] -.require.-> NeuronRunner
   Models["模型（通常用 NIF 实现）"] -.require.-> SynapseRunner
 ```
+
+## Roadmap
+
+- [ ] Runner
+  - [x] Izhikevich model

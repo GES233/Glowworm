@@ -1,5 +1,6 @@
 defmodule Glowworm.SynapseRunner do
   use Task
+  # Task, or Agent?
 
   def start_link(args), do: Task.start_link(__MODULE__, :run, args)
 
