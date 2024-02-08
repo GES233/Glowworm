@@ -16,4 +16,11 @@ defmodule Glowworn.NeuronRunner do
 
   # defp do_run(), do: nil
   # TODO: Implement runner.
+  # - [ ] continous calculate with recursion
+  #   - [x] prototype in example
+  #   - [ ] here
+  # - [ ] when counter = 0 =>
+  #   do_some_stuff(send to Neuron)
+  # - [ ] when pulse =>
+  #   do_some_stuff(send to Neuron)
 end
