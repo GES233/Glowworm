@@ -35,7 +35,7 @@ cycles = 256 * 256  # 256 frames
     [
       {
         %Glowworm.Models.Izhikevich.NeuronState{potential: -65.0, recovery: 0.0},
-        %Glowworm.Models.Izhikevich.RunnerState{counter: 0}
+        %Glowworm.Models.RunnerState{counter: 0}
       }
     ],
     cycles

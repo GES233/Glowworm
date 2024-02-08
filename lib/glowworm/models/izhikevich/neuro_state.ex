@@ -13,11 +13,3 @@ defmodule Glowworm.Models.Izhikevich.InputState do
   }
   defstruct [:current, :counter]
 end
-
-defmodule Glowworm.Models.Izhikevich.RunnerState do
-  @type t :: %__MODULE__{
-    event: atom(),
-    counter: non_neg_integer(),
-  }
-  defstruct [:counter, event: nil]
-end
