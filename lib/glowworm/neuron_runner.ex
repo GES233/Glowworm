@@ -7,11 +7,14 @@ defmodule Glowworn.NeuronRunner do
   """
   use Task
   @default_model Glowworm.Models.Izhikevich
+  # TODO: fetch module from config.
+
+  defp get_module(opts), do: Keyword.get(opts, :runner_module, @default_model)
 
   def start_link(args), do: Task.start_link(__MODULE__, :run, args)
 
   def run({opts}) do
-    _runner_module = Keyword.get(opts, :runner_module, @default_model)
+    _runner_module = get_module(opts)
   end
 
   # defp do_run(), do: nil
