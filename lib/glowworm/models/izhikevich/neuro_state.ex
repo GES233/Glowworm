@@ -9,7 +9,6 @@ end
 defmodule Glowworm.Models.Izhikevich.InputState do
   @type t :: %__MODULE__{
     current: number(),
-    counter: integer(),
   }
-  defstruct [:current, :counter]
+  defstruct [:current]
 end
