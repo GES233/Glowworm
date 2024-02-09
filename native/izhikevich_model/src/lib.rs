@@ -33,7 +33,7 @@ mod event_atom {
 }
 
 #[derive(Debug, NifStruct)]
-#[module = "Glowworm.Models.RunnerState"]
+#[module = "Glowworm.NeuronRunner.RunnerState"]
 struct RunnerState {
   pub event: Atom,
   pub counter: u8,

@@ -1,5 +1,5 @@
 defmodule Demo do
-  alias Glowworm.Models.RunnerState
+  alias Glowworm.NeuronRunner.RunnerState
   alias Glowworm.Models.Izhikevich, as: I
 
   @timestep 0.01
@@ -63,7 +63,7 @@ cycles = Demo.get_total()
     [
       {
         %Glowworm.Models.Izhikevich.NeuronState{potential: -65.0, recovery: 0.0},
-        %Glowworm.Models.RunnerState{counter: 0}
+        %Glowworm.NeuronRunner.RunnerState{counter: 0}
       }
     ],
     cycles
