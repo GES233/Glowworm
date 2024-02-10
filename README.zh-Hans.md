@@ -4,9 +4,18 @@
 
 [English](/README.md)
 
+## 想法
+
 记录着想法来源的内容 [Interactive testbed for cortical modeling? - Elixir Framework Forums / Nx Forum - Elixir Programming Language Forum](https://elixirforum.com/t/interactive-testbed-for-cortical-modeling/61178/3) （如果要中文的话请提 issue ，我会加上去），同时也参考了 [amiryt/Erlang-project](https://github.com/amiryt/Erlang-project) 项目。
 
 分层架构的设计理念来自于 Elixir 的 HTTP 服务器 [ThousandIsland](https://github.com/mtrudel/thousand_island) 。
+
+其中本仓库项目的最终目标是采用更加复杂的神经元实现 [spikingnn](http://spikingnn.net) 。
+其中原网站因为未知原因无法访问，可以通过 [存档](https://web.archive.org/web/20190717080930/http://spikingnn.net/) 下载相关资料。
+
+## 项目的设计
+
+### 架构
 
 项目架构如下图展示：
 
@@ -24,6 +33,10 @@ graph TD
   Models["模型（通常用 NIF 实现）"] -.require.-> NeuronRunner
   Models["模型（通常用 NIF 实现）"] -.require.-> SynapseRunner
 ```
+
+### 神经网络的架构
+
+TODO: until project finished.
 
 ## Roadmap
 
