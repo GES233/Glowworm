@@ -1,8 +1,11 @@
 defmodule Glowworm.Models.LIF.NeuroState do
   @type t :: %__MODULE__{
     potential: number(),
+    fire: boolean(),
+    # Why `fire`?
+    # Because of its name: Leaky-Integrate-**Fire**!
   }
-  defstruct [:potential]
+  defstruct [:potential, :fire]
 end
 
 defmodule Glowworm.Models.LIF.InputState do
