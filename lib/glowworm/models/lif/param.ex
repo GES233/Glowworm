@@ -10,3 +10,8 @@ defmodule Glowworm.Models.LIF.Param do
   }
   defstruct [:r, :c, :tau, :peak_threshold, :reset_value, reset_strategy: :dec]
 end
+
+defmodule Glowworm.Models.LIF.Param.InvalidReset do
+  # TODO
+  defexception [:message]
+end

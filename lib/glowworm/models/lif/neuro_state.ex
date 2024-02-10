@@ -1,4 +1,4 @@
-defmodule Glowworm.Models.LIF.NeuroState do
+defmodule Glowworm.Models.LIF.NeuronState do
   @type t :: %__MODULE__{
     potential: number(),
     fire: boolean(),
