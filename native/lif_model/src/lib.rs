@@ -21,7 +21,7 @@ mod valid_reset_strategy {
 }// TODO: raise error if invalid.
 
 #[derive(Debug, NifStruct)]
-#[module = "Glowworm.NeuronRunner.RunnerState"]
+#[module = "Glowworm.SomaRunner.RunnerState"]
 struct RunnerState {
   pub event: Atom,
   pub counter: u8,

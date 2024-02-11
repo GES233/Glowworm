@@ -1,5 +1,5 @@
 defmodule Glowworm.Models do
-  alias Glowworm.NeuronRunner, as: Neuron
+  alias Glowworm.SomaRunner, as: Neuron
   # alias Glowworm.SynapseRunner, as: Synapse
 
   @typedoc """

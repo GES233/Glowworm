@@ -4,7 +4,7 @@ defmodule Glowworm.Models.Izhikevich do
     crate: :izhikevich_model
 
   @behaviour Glowworm.Models
-  alias Glowworm.NeuronRunner.RunnerState
+  alias Glowworm.SomaRunner.RunnerState
   alias Glowworm.Models.Izhikevich, as: M
 
   @spec nextstep(M.Param, M.NeuronState, M.InputState, RunnerState) ::

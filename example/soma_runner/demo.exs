@@ -1,5 +1,5 @@
 defmodule Demo do
-  alias Glowworm.NeuronRunner.RunnerState
+  alias Glowworm.SomaRunner.RunnerState
   alias Glowworm.Models.Izhikevich, as: I
 
   @timestep 0.01
@@ -63,7 +63,7 @@ cycles = Demo.get_total()
     [
       {
         %Glowworm.Models.Izhikevich.NeuronState{potential: -65.0, recovery: 0.0},
-        %Glowworm.NeuronRunner.RunnerState{counter: 0}
+        %Glowworm.SomaRunner.RunnerState{counter: 0}
       }
     ],
     cycles
@@ -85,9 +85,9 @@ raw = Enum.map(res, split)
 |> Enum.join("\n")
 
 :ok = File.write(
-  "example/neuron_runner/r_temp.csv",
+  "example/soma_runner/r_temp.csv",
   "v,u\n" <> raw
 )
 
-Mix.Shell.IO.cmd("python example/neuron_runner/demo.py")
+Mix.Shell.IO.cmd("python example/soma_runner/demo.py")
 # TODO: Send args with `cycles`.

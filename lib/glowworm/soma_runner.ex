@@ -1,6 +1,6 @@
-defmodule Glowworm.NeuronRunner do
+defmodule Glowworm.SomaRunner do
   @moduledoc """
-  NeuronRunner.
+  SomaRunner.
 
   * Running a frame(256 times)
     - zip the data to neuron.
@@ -31,7 +31,7 @@ defmodule Glowworm.NeuronRunner do
   #   do_some_stuff(send event to Neuron)
 end
 
-defmodule Glowworm.NeuronRunner.RunnerState do
+defmodule Glowworm.SomaRunner.RunnerState do
   @type t :: %__MODULE__{
     event: atom(),
     counter: non_neg_integer(),

@@ -1,4 +1,4 @@
-# NeuronRunner
+# SomaRunner
 
 ## Izhikevich model
 

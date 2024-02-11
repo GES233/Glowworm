@@ -27,10 +27,10 @@ graph TD
   PortScheduler --1..m--> Port("端口（Port）")
   Port <-.刺激或记录.-> Neuron
   Neuron <-.神经元之间的通信.-> Neuron
-  Neuron --> NeuronRunner("神经元状态的仿真（NeuronRunner） Task")
+  Neuron --> SomaRunner("神经元状态的仿真（SomaRunner） Task")
   Neuron --> SynapseRunner("突触的仿真（SynapseRunner） Task")
-  SynapseRunner -.输入电流.-> NeuronRunner
-  Models["模型（通常用 NIF 实现）"] -.require.-> NeuronRunner
+  SynapseRunner -.输入电流.-> SomaRunner
+  Models["模型（通常用 NIF 实现）"] -.require.-> SomaRunner
   Models["模型（通常用 NIF 实现）"] -.require.-> SynapseRunner
 ```
 

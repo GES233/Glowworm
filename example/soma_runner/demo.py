@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-file = (Path.cwd() / "example/neuron_runner/r_temp.csv")
+file = (Path.cwd() / "example/soma_runner/r_temp.csv")
 
 df = pd.read_csv(file)
 # cycles / timestep, timestep
@@ -19,7 +19,6 @@ axarr[0].set_title('potential(v)', color='gray')
 axarr[1].plot(t.copy(), df['u'], color='#ffaa7f')
 axarr[1].set_title('recovery(u)', color='gray')
 
-# plt.legend('potential', 'recovery')
 plt.xlim(-5.0, 660.0)
 plt.show()
 
