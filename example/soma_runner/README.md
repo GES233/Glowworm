@@ -3,7 +3,7 @@
 ## Izhikevich model
 
 ```
-~playground/glowworm> mix example/neuron_runner/demo.exs
+~playground/glowworm> mix example/soma_runner/demo.exs
 Start inject current at 15.36ms.
 Pulse at 105.26ms.
 Pulse at 107.23ms.
@@ -31,4 +31,4 @@ Used 147660ms for 655.36ms.
 Ratio: 225.311279296875.
 ```
 
-![pic](/example/neuron_runner/Izhikevich_chattering.png)
+![pic](/example/soma_runner/Izhikevich_chattering.png)
