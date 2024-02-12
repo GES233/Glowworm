@@ -28,6 +28,8 @@ glowworm-*.tar
 ## Native related
 # Cargo
 /native/**/Cargo.lock
+/native/**/target
+# For some scenario required temp file.
 
 # Output
 /priv/native/*.so
