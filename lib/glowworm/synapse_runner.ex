@@ -8,3 +8,11 @@ defmodule Glowworm.SynapseRunner do
     _runner_module = Keyword.get(opts, :runner_module)
   end
 end
+
+defmodule Glowworm.SynapseRunner.RunnerState do
+  @type t :: %__MODULE__{
+    current: number(),
+    counter: non_neg_integer()
+  }
+  defstruct [:current, :counter]
+end
