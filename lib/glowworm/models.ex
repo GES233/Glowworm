@@ -35,5 +35,5 @@ defmodule Glowworm.Models do
   Send NeuronState under specific model into
   implement-agnostic format.
   """
-  @callback to_neuron(state) :: Glowworm.Neuron.State.t()
+  @callback to_neuron(state, runner_state()) :: Glowworm.Neuron.State.t()
 end
