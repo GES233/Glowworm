@@ -36,8 +36,8 @@ defmodule Glowworm.SomaRunner.RunnerState do
   Only used for soma runner.
   """
   @type t :: %__MODULE__{
-    event: atom(),
-    counter: non_neg_integer(),
-  }
+          event: atom(),
+          counter: non_neg_integer()
+        }
   defstruct [:counter, event: nil]
 end

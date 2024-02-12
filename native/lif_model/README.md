@@ -1,4 +1,4 @@
-# NIF for Elixir.Glowworn.Models.LIF
+# NIF for Elixir.Glowworm.Models.LIF
 
 ## To build the NIF module:
 
@@ -7,7 +7,7 @@
 ## To load the NIF:
 
 ```elixir
-defmodule Glowworn.Models.LIF do
+defmodule Glowworm.Models.LIF do
   use Rustler, otp_app: :glowworm, crate: "lif_model"
 
   # When your NIF is loaded, it will override this function.

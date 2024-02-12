@@ -1,4 +1,4 @@
-defmodule Glowworn.Neuron do
+defmodule Glowworm.Neuron do
   @moduledoc """
   #
   """

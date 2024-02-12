@@ -13,34 +13,38 @@ defmodule NeuronModelTest do
   end
 
   test "rest_potential" do
-    {next_s, runner} = I.nextstep(
-      izh_param(),
-      %I.NeuronState{potential: -65.0, recovery: -9.2},
-      %I.InputState{current: 0.0},
-      %I.RunnerState{counter: 0}
-    )
+    {next_s, runner} =
+      I.nextstep(
+        izh_param(),
+        %I.NeuronState{potential: -65.0, recovery: -9.2},
+        %I.InputState{current: 0.0},
+        %I.RunnerState{counter: 0}
+      )
 
     assert %I.RunnerState{counter: 1, event: nil} == runner
   end
 
   test "action_potential" do
-    {next_s, runner} = I.nextstep(
-      izh_param(),
-      %I.NeuronState{potential: 29.99, recovery: -15.0},  # IDK
-      %I.InputState{current: 5.0},
-      %I.RunnerState{counter: 0}
-    )
+    {next_s, runner} =
+      I.nextstep(
+        izh_param(),
+        # IDK
+        %I.NeuronState{potential: 29.99, recovery: -15.0},
+        %I.InputState{current: 5.0},
+        %I.RunnerState{counter: 0}
+      )
 
     assert %I.RunnerState{counter: 1, event: :pulse} == runner
   end
 
   test "counter reset" do
-    {next_s, runner} = I.nextstep(
-      izh_param(),
-      %I.NeuronState{potential: -65.0, recovery: -9.2},
-      %I.InputState{current: 5.0},
-      %I.RunnerState{counter: 255}
-    )
+    {next_s, runner} =
+      I.nextstep(
+        izh_param(),
+        %I.NeuronState{potential: -65.0, recovery: -9.2},
+        %I.InputState{current: 5.0},
+        %I.RunnerState{counter: 255}
+      )
 
     assert runner.counter == 0
   end
