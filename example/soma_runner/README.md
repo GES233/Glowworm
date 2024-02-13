@@ -4,20 +4,20 @@
 
 ```
 ~playground/glowworm> mix example/soma_runner/demo.exs
-Start inject current at 15.36ms.
-Pulse at 105.26ms.
-Pulse at 107.23ms.
-Pulse at 109.68ms.
-Pulse at 113.66ms.
-End inject current at 143.36ms.
-δv = -5.551559212335633e-10
-δu = 9.774936415851698e-10
-Over close threshold since 69631(696.3100000000001ms.)
-
+Start inject current at 1536(15.36ms).
+Pulse at 10525(105.25ms).
+Pulse at 10722(107.22ms).
+Pulse at 10967(109.67ms).
+Pulse at 11365(113.65ms).
+End inject current at 14336(143.36ms).
+δv = -5.470542596697214e-8
+δu = 9.546370449697861e-8
+Over close threshold since 52735(527.35ms).
+Shut down...
 ====
-69633 steps.
-Used 125849ms for 1310.72ms.
-Ratio: 96.01516723632812.
+52737 steps.
+Used 148377ms for 1310.72ms.
+Ratio: 113.20266723632812.
 ```
 
 ![pic](/example/soma_runner/Izhikevich_chattering.png)

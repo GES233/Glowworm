@@ -28,16 +28,16 @@ defmodule Demo do
     # rest = @current_map |> get_frame |> sort
     cond do
       tick == 256 * (250+256) ->
-        IO.puts("Start inject current at #{(get_total()-tick) * @timestep}ms.")
+        IO.puts("Start inject current at #{get_total() - tick}(#{(get_total() - tick) * @timestep}ms).")
 
         5.0
         tick > 256 * (200+256) and tick < 256 * (250+256) -> 5.0
       tick == 256 * (200+256) ->
-        IO.puts("End inject current at #{(get_total()-tick) * @timestep}ms.")
+        IO.puts("End inject current at #{get_total() - tick}(#{(get_total() - tick) * @timestep}ms).")
 
-        0.05
+        0.00
       # tick > 256 * 50 and tick <= 256 * 100 -> 3.0
-      true -> 0.05
+      true -> 0.00
     end
   end
 
@@ -58,7 +58,7 @@ defmodule Demo do
     if @check_pulse do
       case new_runner.event do
         :pulse ->
-          IO.puts("Pulse at #{(get_total()-ct) * @timestep}ms.")
+          IO.puts("Pulse at #{get_total() - ct}(#{(get_total() - ct) * @timestep}ms).")
         _ -> nil
       end
     end
@@ -71,7 +71,7 @@ defmodule Demo do
         0 -> cond do
           # In `Glwworm.Neuron`, compare between two frames
           # with counter = 0 and previous step.
-          -1.0e-9 <= du and du <= 1.0e-9 and -1.0e-9 <= dv and dv <= 1.0e-9 ->
+          -1.0e-7 <= du and du <= 1.0e-7 and -1.0e-7 <= dv and dv <= 1.0e-7 and current == 0.0 ->
             inspect_halt(du, dv, ct)
 
             calc([{new_neuron, new_runner} | s], 0)
@@ -87,7 +87,7 @@ defmodule Demo do
   defp inspect_halt(dv, du, ct) do
     IO.puts("δv = #{dv}")
     IO.puts("δu = #{du}")
-    IO.puts("Over close threshold since #{get_total() - ct}(#{(get_total() - ct) * @timestep}ms.)\n")
+    IO.puts("Over close threshold since #{get_total() - ct}(#{(get_total() - ct) * @timestep}ms).\nShut down...")
   end
 end
 
@@ -101,7 +101,7 @@ cycles = Demo.get_total()
     ],
     cycles
 ])
-IO.puts("====\n#{res |> length} steps.")
+IO.puts("Total:\n#{res |> length} steps.")
 IO.puts("Used #{time}ms for #{Demo.get_timestep() * cycles}ms.\nRatio: #{time / (Demo.get_timestep() * cycles)}.")
 
 split = fn tp ->
@@ -123,4 +123,4 @@ raw = Enum.map(res, split)
   "v,u\n" <> raw
 )
 
-Mix.Shell.IO.cmd("python example/soma_runner/demo.py --count #{length(res)}")
+Mix.Shell.IO.cmd("python example/soma_runner/demo.py --count #{length(res)} --timestep #{Demo.get_timestep()}")
