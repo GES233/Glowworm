@@ -6,7 +6,27 @@
 
 ## 想法
 
-记录着想法来源的内容 [Interactive testbed for cortical modeling? - Elixir Framework Forums / Nx Forum - Elixir Programming Language Forum](https://elixirforum.com/t/interactive-testbed-for-cortical-modeling/61178/3) （如果要中文的话请提 issue ，我会加上去），同时也参考了 [amiryt/Erlang-project](https://github.com/amiryt/Erlang-project) 项目。
+记录着想法来源的内容 [Interactive testbed for cortical modeling? - Elixir Framework Forums / Nx Forum - Elixir Programming Language Forum](https://elixirforum.com/t/interactive-testbed-for-cortical-modeling/61178/3) 。
+
+> 内容如下：
+>
+> 我曾经考虑过类似的想法，但我的想法仍然很幼稚，而且离实现还很远。
+>
+> 如果我没记错的话，皮质柱是一组神经元，从单个柱中记录可以使许多层的神经元产生极其复杂的行为。因此，我认为最好将建模水平设置得更具体，比如一个细胞，甚至是细胞膜的部分（细胞体、轴突、树突和突触），这是我原始想法中的观点。
+>
+> 像计算下一个时刻的膜电位或离子浓度这样的 CPU 密集型任务可以交给 Julia 或 Rust。与向相关节点发送脉冲相关的任务，或者如果神经元处于动作电位状态则可以由 BEAM 很好地处理。
+>
+> 给我这个想法的原始触发并不是类似于 Elixir 中的 Nx 这样的计算项目，而是来自生物学视角的以下三个事实：
+>
+> 1. 只有少数神经元处于激活状态
+> 2. 单体以网格结构连接（我高中时并不理解编程中的“图”概念）
+> 3. 单体形态的多样性（不同类型的神经元具有不同类型的神经递质或离子通道）
+>
+> 从这个角度来看，我认为更好的做法是建立一个通用的模拟或仿真平台，下一步是设置一个级别并深入研究。
+>
+> 最后，我不是以英语为母语的人，请纠正我如果有任何事实或语法错误。
+
+同时也参考了 [amiryt/Erlang-project](https://github.com/amiryt/Erlang-project) 项目。
 
 分层架构的设计理念来自于 Elixir 的 HTTP 服务器 [ThousandIsland](https://github.com/mtrudel/thousand_island) 。
 
@@ -42,3 +62,8 @@ TODO: until project finished.
 
 - [ ] Runner
   - [x] Izhikevich model
+  - [ ] LIF model
+  - [ ] Synapse modeling
+- [ ] Neuron
+  - [ ] Complete `NeuronState`
+  - [ ] 

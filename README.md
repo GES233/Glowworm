@@ -16,34 +16,19 @@ Simulation of neuron references amiryt's [Erlang-project](https://github.com/ami
 
 Architecture of application like following graph:
 
-```text
-           +-------------+   +-----------+
-           | Application | - | Inspector |
-           +-------------+   +-----------+
-         /                  \
-+---------------+  +-------------------+
-| PortScheduler |  |  NeuroSupervisor  |
-|  Supervisor   |  | DynamicSupervisor |
-+---------------+  +-------------------+
-      / .. \              / .. \
-     +------+         +-------------+
-     | Port |         |   Neuron    |
-     +------+         | :gen_statem |
-                      +-------------+
-                             |
-                         +--------+
-                         | Runner |
-                         | (diff) |
-                         |  Task  |
-                         +--------+
-                             |
-                           using
-                             |
-                            \|/
-                      +------------+
-                      | Model.Impl |
-                      |  with NIF  |
-                      +------------+
+```mermaid
+graph TD
+  Application --> NeuronSupervisor
+  NeuronSupervisor --1..n--> Neuron["Neuron :gen_statem"]
+  Application --> PortScheduler("PortScheduler")
+  PortScheduler --1..m--> Port("Port")
+  Port <-.simulus or record.-> Neuron
+  Neuron <-.communication.-> Neuron
+  Neuron --> SomaRunner("SomaRunner Task")
+  Neuron --> SynapseRunner("SynapseRunner Task")
+  SynapseRunner -.current.-> SomaRunner
+  Models -.require.-> SomaRunner
+  Models -.require.-> SynapseRunner
 ```
 
 ## Installation
