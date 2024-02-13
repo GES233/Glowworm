@@ -13,6 +13,13 @@ defmodule Demo do
   ## Param
   @check_halt true
   @check_pulse true
+  defp get_inspector(item) do
+    case item do
+      :pulse -> @check_pulse
+      :halt -> @check_halt
+      _ -> nil
+    end
+  end
 
   def get_timestep(), do: @timestep
   def get_frame() do
@@ -55,7 +62,7 @@ defmodule Demo do
       runner
     )
 
-    if @check_pulse do
+    if get_inspector(:pulse) do
       case new_runner.event do
         :pulse ->
           IO.puts("Pulse at #{get_total() - ct}(#{(get_total() - ct) * @timestep}ms).")
@@ -63,15 +70,15 @@ defmodule Demo do
       end
     end
 
-    if @check_halt do
-      du = new_neuron.recovery - neuron.recovery
-      dv = new_neuron.potential - neuron.potential
+    if get_inspector(:halt) do
+      du = (new_neuron.recovery - neuron.recovery) / get_timestep()
+      dv = (new_neuron.potential - neuron.potential) / get_timestep()
 
       case new_runner.counter do
         0 -> cond do
           # In `Glwworm.Neuron`, compare between two frames
-          # with counter = 0 and previous step.
-          -1.0e-7 <= du and du <= 1.0e-7 and -1.0e-7 <= dv and dv <= 1.0e-7 and current == 0.0 ->
+          # with counter = 0 in previous step.
+          -1.0e-5 <= du and du <= 1.0e-5 and -1.0e-5 <= dv and dv <= 1.0e-5 and current == 0.0 ->
             inspect_halt(du, dv, ct)
 
             calc([{new_neuron, new_runner} | s], 0)
@@ -85,13 +92,12 @@ defmodule Demo do
   end
 
   defp inspect_halt(dv, du, ct) do
-    IO.puts("δv = #{dv}")
-    IO.puts("δu = #{du}")
-    IO.puts("Over close threshold since #{get_total() - ct}(#{(get_total() - ct) * @timestep}ms).\nShut down...")
+    IO.puts("δv/δt = #{dv}\nδu/δt = #{du}")
+    IO.puts("Over close threshold since #{get_total() - ct}(#{(get_total() - ct) * @timestep}ms).")
+    IO.puts("Shut down...")
   end
 end
 
-cycles = Demo.get_total()
 {time, res} = :timer.tc(&Demo.calc/2, [
     [
       {
@@ -99,10 +105,14 @@ cycles = Demo.get_total()
         %Glowworm.SomaRunner.RunnerState{counter: 0}
       }
     ],
-    cycles
+    Demo.get_total()
 ])
-IO.puts("Total:\n#{res |> length} steps.")
-IO.puts("Used #{time}ms for #{Demo.get_timestep() * cycles}ms.\nRatio: #{time / (Demo.get_timestep() * cycles)}.")
+IO.puts("""
+Total:
+#{length(res)} steps.
+Used #{time}ms for #{Demo.get_timestep() * length(res)}ms.
+Ratio: #{time / (Demo.get_timestep() * length(res))}.
+""")
 
 split = fn tp ->
   {state, _} = tp
