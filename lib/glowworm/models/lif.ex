@@ -6,6 +6,7 @@ defmodule Glowworm.Models.LIF do
   def add(_a, _b), do: :erlang.nif_error(:nif_not_loaded)
 
   @behaviour Glowworm.Models
+
   alias Glowworm.Neuron.State, as: NeuronState
   alias Glowworm.SomaRunner.RunnerState
   alias Glowworm.Models.LIF, as: M

@@ -3,8 +3,7 @@ defmodule Glowworm.Models.AlphaSynapse do
 
   @behaviour Glowworm.Models
 
-  def nextstep(_param, _state, _input, _runner_state), do:
-    :erlang.nif_error(:nif_not_loaded)
+  def nextstep(_param, _state, _input, _runner_state), do: :erlang.nif_error(:nif_not_loaded)
 
   def nextstep(param, state, input, runner_state, _opts \\ []) do
     # TODO: update opts parsing

@@ -4,6 +4,7 @@ defmodule Glowworm.Models.Izhikevich do
     crate: :izhikevich_model
 
   @behaviour Glowworm.Models
+
   alias Glowworm.Neuron.State, as: NeuronState
   alias Glowworm.SomaRunner.RunnerState
   alias Glowworm.Models.Izhikevich, as: M
