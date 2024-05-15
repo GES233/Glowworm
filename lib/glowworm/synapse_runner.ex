@@ -12,7 +12,10 @@ end
 defmodule Glowworm.SynapseRunner.RunnerState do
   @type t :: %__MODULE__{
           current: number(),
-          counter: non_neg_integer()
+          counter: non_neg_integer(),
+          extra: list(number()) | nil,
+          # `extra` used to storage,
+          # because of its properties.
         }
-  defstruct [:current, :counter]
+  defstruct [:current, :counter, extra: nil]
 end
