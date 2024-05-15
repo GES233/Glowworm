@@ -1,11 +1,23 @@
 defmodule Glowworm.Neuron do
   @moduledoc """
-  #
+  Neuron in `Glowworm` is a basic component.
+  It is the building-block of the whole project.
+
+  There are two phases in neurons:
+
+  * activated
+  * resting
+
+  where a neuron at `resting` means that
+  neuron doesn't in active, all status were
+  blocked and no function invoked;
+  when in `activated`, .
   """
   alias :gen_statem, as: GenStateM
   @behaviour GenStateM
 
   def start_link(args), do: GenStateM.start_link(__MODULE__, args, [])
+  # Type of runners and params.
 
   def callback_mode(),
     # - :state_functions
