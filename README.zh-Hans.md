@@ -31,7 +31,7 @@
 分层架构的设计理念来自于 Elixir 的 HTTP 服务器 [ThousandIsland](https://github.com/mtrudel/thousand_island) 。
 
 其中本仓库项目的最终目标是采用更加复杂的神经元实现 [spikingnn](http://spikingnn.net) 。
-其中原网站因为未知原因无法访问，可以通过 [存档](https://web.archive.org/web/20190717080930/http://spikingnn.net/) 下载相关资料。
+其中原网站因为未知原因无法访问，可以通过 [WebArchive](https://web.archive.org/web/20190717080930/http://spikingnn.net/) 下载相关资料。
 
 ## 项目的设计
 
@@ -60,10 +60,16 @@ TODO: until project finished.
 
 ## Roadmap
 
-- [ ] Runner
-  - [x] Izhikevich model
-  - [ ] LIF model
-  - [ ] Synapse modeling
-- [ ] Neuron
-  - [ ] Complete `NeuronState`
-  - [ ] 
+- [ ] 运行组件
+  - [x] Izhikevich 模型
+  - [ ] LIF 模型
+  - [ ] 突触建模
+  - [ ] 具有神经可塑性的突触
+- [ ] 神经元
+  - [ ] 完整的 `NeuronState` （不依赖于运行部分）
+  - [ ] 将神经元变为进程并且通过通信来实现交流
+  - [ ] 进程监控
+    - 激活/休眠
+    - 故障时重启
+- [ ] 感知的建模
+- ...

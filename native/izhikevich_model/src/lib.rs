@@ -61,7 +61,27 @@ fn peak(v: f64, peak_threshold: f64) -> bool {
 }
 
 fn update(_v: f64, u: f64, c: f64, d: f64) -> (f64, f64) {
+    // Update status when peak.
     return (c, u + d);
+}
+
+fn izh_callback(next_potential: f64, next_recovery: f64, condition: bool, param: Param) -> (f64, f64) {
+    if condition {
+        update(next_potential, next_recovery, param.c, param.d)
+    } else {
+        (next_potential, next_recovery)
+    }
+}
+
+fn runner_state_oprate(runner: RunnerState, peak: bool) -> RunnerState {
+    // Wrap all operate to `RunnerState`.
+    let next_counter: u8 = runner.counter + 1;
+    let event: Atom = if peak {event_atom::pulse()} else {event_atom::nil()};
+
+    RunnerState{
+        event: event,
+        counter: next_counter
+    }
 }
 
 /**
@@ -71,12 +91,14 @@ fn update(_v: f64, u: f64, c: f64, d: f64) -> (f64, f64) {
  *
  * * NeuronState(`Elixir.Glowworm.Models.Izhikevich.NeuronState`)
  * * Param(`Elixir.Glowworm.Models.Izhikevich.Param`)
- * * Input(`Elixir.Glowworm.Models.Izhikevich.InjectState`)
+ * * Input(`Elixir.Glowworm.Models.Izhikevich.InputState`)
+ * * RunnerState(`Elixir.Glowworm.Models.Izhikevich.RunnerState`)
  *
- * return: `{NeuronState, EventAtom | nil}`
+ * return: `{NeuronState, RunnerState}`
  *
  * * new NeuronState in next step.
- * * Event that can trigger propogate pulse or raise error.
+ * * RunnerState contains event that can trigger propogate
+ *   pulse or raise error, and counter to count ticks.
 */
 
 #[rustler::nif]
@@ -120,28 +142,24 @@ fn nextstep(param: Param, state: NeuronState, input: InputState, runner: RunnerS
         dv(current.0 + k3.0 * time_step, current.1 + time_step * k3.1, current_i),
         du(current.0 + time_step * k3.0, current.1 + k3.1 * time_step, param.a, param.b),
     );
-    // let mut next_potential: f64 = current.0 + k1.0 * time_step;
-    // let mut next_recovery: f64 = current.1 + k1.1 * time_step;
     let mut next_potential: f64 = current.0 + (k1.0 + 2.0 * k2.0 + 2.0 * k3.0 + k4.0) * time_step / 6.0;
     let mut next_recovery: f64 = current.1 + (k1.1 + 2.0 * k2.1 + 2.0 * k3.1 + k4.1) * time_step / 6.0;
-    let mut event: Atom = event_atom::nil();
+
     // callback.
-    if peak(next_potential, param.peak_threshold) {
-        (next_potential, next_recovery) = update(next_potential, next_recovery, param.c, param.d);
-        event = event_atom::pulse();
-    }
-    let next_counter: u8 = runner.counter + 1;
+    let peak: bool = peak(next_potential, param.peak_threshold);
+    (next_potential, next_recovery) = izh_callback(
+        next_potential,
+        next_recovery,
+        peak,
+        param
+    );
 
     NifResult {
         neuron: NeuronState{
             potential: next_potential,
             recovery: next_recovery,
-            // TODO: Add counter
         },
-        runner: RunnerState{
-            event: event,
-            counter: next_counter
-        }
+        runner: runner_state_oprate(runner, peak)
     }
 }
 

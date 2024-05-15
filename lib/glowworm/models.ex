@@ -1,6 +1,7 @@
 defmodule Glowworm.Models do
   @moduledoc """
   Glowworm.Models implement the model in runner.
+  This module records some common components.
   """
   alias Glowworm.SomaRunner, as: Soma
   alias Glowworm.SynapseRunner, as: Synapse
@@ -11,17 +12,20 @@ defmodule Glowworm.Models do
   @type state :: map() | struct()
 
   @typedoc """
-  Parameter of model.
+  Parameters of model.
   """
   @type param :: map() | struct()
 
   @typedoc """
-  Extra of model.
+  Extra singal or simulation of model.
   """
   @type input :: map() | struct()
 
   @typedoc """
   Runner state(implementation-agnostic).
+
+  The meaning of use specific module is let
+  the type of input and output coherence.
   """
   @type runner_state ::
           Soma.RunnerState.t()
@@ -50,5 +54,5 @@ defmodule Glowworm.Models do
 
   Every part of runner didn't get entire state.
   """
-  @callback to_neuron(state, runner_state()) :: Glowworm.Neuron.State.t()
+  @callback to_neuron(state, runner_state) :: Glowworm.Neuron.State.t()
 end
