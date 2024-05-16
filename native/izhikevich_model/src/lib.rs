@@ -1,4 +1,4 @@
-#![allow(arithmetic_overflow)]
+#![allow(arithmetic_overflow, non_snake_case)]
 use rustler::{Atom, NifStruct, NifTuple};
 
 #[derive(Debug, NifStruct)]

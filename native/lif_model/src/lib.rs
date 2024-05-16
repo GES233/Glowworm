@@ -1,4 +1,4 @@
-#![allow(arithmetic_overflow)]
+#![allow(arithmetic_overflow, non_snake_case)]
 use rustler::{Atom, NifStruct, NifTuple};
 
 #[derive(Debug, NifStruct)]
@@ -8,6 +8,7 @@ struct Param {
     c: f64,
     tau: f64,
     peak_threshold: f64,
+    timestep: f64,
     reset_value: f64,
     reset_strategy: Atom,
 }
@@ -31,6 +32,7 @@ struct RunnerState {
 #[module = "Glowworm.Models.LIF.NeuronState"]
 struct NeuronState {
     pub potential: f64,
+    remaining_refrac_time: f64,
     pub fire: bool,
 }
 
@@ -46,13 +48,19 @@ struct NifResult {
     pub runner: RunnerState,
 }
 
-#[rustler::nif]
-fn add(a: i64, b: i64) -> i64 {
-    a + b
-}
+// fn dv(_current_potential: f64, _current_i: f64, _current_remain_time: f64, _param: Param) -> (f64, f64) {(0.0, 0.0)}
 
 #[rustler::nif]
-fn nextstep(_param: Param, state: NeuronState, _input: InputState, runner: RunnerState) -> NifResult {
+fn nextstep(param: Param, state: NeuronState, _input: InputState, runner: RunnerState) -> NifResult {
+    // 1. Parse param.
+    let _timestep: f64 = param.timestep;
+
+    // 2. Calc next step.
+    // use eula method.
+
+    // 3. Set event.
+
+    // 4. Result.
     NifResult {
         neuron: state,
         runner: RunnerState{
@@ -62,4 +70,4 @@ fn nextstep(_param: Param, state: NeuronState, _input: InputState, runner: Runne
     }
 }
 
-rustler::init!("Elixir.Glowworm.Models.LIF", [add, nextstep]);
+rustler::init!("Elixir.Glowworm.Models.LIF", [nextstep]);

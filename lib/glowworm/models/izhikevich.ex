@@ -10,8 +10,8 @@ defmodule Glowworm.Models.Izhikevich do
   alias Glowworm.Models.Izhikevich, as: M
 
   @impl true
-  @spec nextstep(M.Param, M.NeuronState, M.InputState, RunnerState) ::
-          {M.NeuronState, RunnerState}
+  @spec nextstep(M.Param.t(), M.NeuronState.t(), M.InputState.t(), RunnerState.t()) ::
+          {M.NeuronState.t(), RunnerState.t()}
   def nextstep(_param, _state, _input, _runner), do: :erlang.nif_error(:nif_not_loaded)
 
   @impl true
