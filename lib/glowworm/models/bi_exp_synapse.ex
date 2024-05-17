@@ -6,7 +6,7 @@ defmodule Glowworm.Models.BiExpSynapse do
   # Refrences https://www.tusharchauhan.com/writing/models-of-synaptic-conductance-iii/
   use Rustler,
   otp_app: :glowworm,
-  crate: :bi_exp_model
+  crate: :bi_exp_syn_model
   @behaviour Glowworm.Models
 
   def complete_param(tau_decay, k, _g_amp) do
