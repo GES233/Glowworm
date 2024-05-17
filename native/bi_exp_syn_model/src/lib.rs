@@ -27,6 +27,7 @@ struct RunnerState {
     current: f64,
     counter: u8,
     extra: [] // list(number()) | nil
+    // Set to here because this var is implement-agnostic.
 }
 
 #[derive(NifTuple)]
@@ -36,8 +37,11 @@ struct NifResult {
 }
 
 #[rustler::nif]
-fn nextstep() -> NifResult {
-    // ...
+fn nextstep(_param: Param, state: SynapticState, _input: <Any>, runner: RunnerState) -> NifResult {
+    NifResult {
+        synapse: state,
+        runner: runner
+    }
 }
 
 rustler::init!("Elixir.Glowworm.Models.BiExpSynapse", [nextstep]);
