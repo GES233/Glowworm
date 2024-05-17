@@ -16,7 +16,24 @@ defmodule Glowworm.Neuron do
   alias :gen_statem, as: GenStateM
   @behaviour GenStateM
 
-  def start_link(args), do: GenStateM.start_link(__MODULE__, args, [])
+  @type neuron_id :: pid() | atom()
+  @type neuron_config :: map() | struct()
+  @type neuron_state :: :activate | :resting
+  @type t :: %__MODULE__{
+    config: Glowworm.Neuron.Config.t(),
+    activate_runner: %{atom() => maybe_improper_list(pid())},
+    state: Glowworm.Neuron.State.t()
+  }
+
+  defstruct [:config, :activate_runner, :state]
+
+  def start_link(args) do
+    # TODO: Parse args.
+    # Load config.
+    # Set initial state.
+
+    GenStateM.start_link(__MODULE__, args, [])
+  end
   # Type of runners and params.
 
   def callback_mode(),
@@ -27,6 +44,15 @@ defmodule Glowworm.Neuron do
   def init([]) do
     {:ok, :idle, ""}
   end
+end
+
+defmodule Glowworm.Neuron.Config do
+  # To record neurons.
+  @type t :: %__MODULE__{
+    from: %{atom() => atom()},
+    to: %{atom() => atom()},
+  }
+  defstruct [:from, :to]
 end
 
 defmodule Glowworm.Neuron.State do
