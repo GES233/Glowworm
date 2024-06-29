@@ -1,5 +1,7 @@
 #![allow(arithmetic_overflow, non_snake_case)]
-use rustler::{Atom, NifStruct, NifTuple};
+use std::any;
+
+use rustler::{Atom, NifStruct, NifTuple, Atom};
 
 /**
  * Deeply referenced Tushar Chauhan's article:
@@ -21,12 +23,14 @@ struct SynapticState {
     h: f64
 }
 
+mod extra_atom {rustler::atoms! {nil}}
+
 #[derive(Debug, NifStruct)]
 #[module("Glowworm.SynapseRunner.RunnerState")]
 struct RunnerState {
     current: f64,
     counter: u8,
-    extra: [] // list(number()) | nil
+    extra: Vec<f64> // Atom // list(number()) | nil
     // Set to here because this var is implement-agnostic.
 }
 
@@ -37,7 +41,7 @@ struct NifResult {
 }
 
 #[rustler::nif]
-fn nextstep(_param: Param, state: SynapticState, _input: <Any>, runner: RunnerState) -> NifResult {
+fn nextstep(_param: Param, state: SynapticState, _input: any, runner: RunnerState) -> NifResult {
     NifResult {
         synapse: state,
         runner: runner
