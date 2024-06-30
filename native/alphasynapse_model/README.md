@@ -1,4 +1,4 @@
-# NIF for Elixir.BiExpSynapse
+# NIF for Elixir.Glowworm.Models.AlphaSynapse
 
 ## To build the NIF module:
 
@@ -7,8 +7,8 @@
 ## To load the NIF:
 
 ```elixir
-defmodule BiExpSynapse do
-  use Rustler, otp_app: :glowworm, crate: "bi_exp_syn_model"
+defmodule Glowworm.Models.AlphaSynapse do
+  use Rustler, otp_app: :glowworm, crate: "alphasynapse_model"
 
   # When your NIF is loaded, it will override this function.
   def add(_a, _b), do: :erlang.nif_error(:nif_not_loaded)

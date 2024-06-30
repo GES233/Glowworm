@@ -1,11 +1,11 @@
 [package]
-name = "bi_exp_syn_model"
+name = "alphasynapse_model"
 version = "0.1.0"
 authors = []
 edition = "2021"
 
 [lib]
-name = "bi_exp_syn_model"
+name = "alphasynapse_model"
 path = "src/lib.rs"
 crate-type = ["cdylib"]
 

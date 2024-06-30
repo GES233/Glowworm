@@ -1,37 +1,27 @@
 #![allow(arithmetic_overflow, non_snake_case)]
-use std::any;
 
+use std::any;
 use rustler::{Atom, NifStruct, NifTuple, Atom};
 
-/**
- * Deeply referenced Tushar Chauhan's article:
- * https://www.tusharchauhan.com/writing/models-of-synaptic-conductance-iii/
-*/
-
 #[derive(Debug, NifStruct)]
-#[module("Glowworm.Models.BiExpSynapse.Param")]
+#[module("Glowworm.Models.AlphaSynapse.Param")]
 struct Param {
-    tau_decay: f64,
-    k: f64,
+    tau: f64,
     g_amp: f64
 }
 
 #[derive(Debug, NifStruct)]
-#[module("Glowworm.Models.BiExpSynapse.SynapticState")]
+#[module("Glowworm.Models.AlphaSynapse.SynapticState")]
 struct SynapticState {
     g: f64,
     h: f64
 }
-
-mod extra_atom {rustler::atoms! {nil}}
 
 #[derive(Debug, NifStruct)]
 #[module("Glowworm.SynapseRunner.RunnerState")]
 struct RunnerState {
     current: f64,
     counter: u8,
-    extra: Vec<f64> // Atom // list(number()) | nil
-    // Set to here because this var is implement-agnostic.
 }
 
 #[derive(NifTuple)]
@@ -48,4 +38,4 @@ fn nextstep(_param: Param, state: SynapticState, _input: any, runner: RunnerStat
     }
 }
 
-rustler::init!("Elixir.Glowworm.Models.BiExpSynapse", [nextstep]);
+rustler::init!("Elixir.Glowworm.Models.AlphaSynapse", [nextstep]);
