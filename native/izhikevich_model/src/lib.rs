@@ -93,7 +93,7 @@ fn runner_state_oprate(runner: RunnerState, peak: bool) -> RunnerState {
  * * NeuronState(`Elixir.Glowworm.Models.Izhikevich.NeuronState`)
  * * Param(`Elixir.Glowworm.Models.Izhikevich.Param`)
  * * Input(`Elixir.Glowworm.Models.Izhikevich.InputState`)
- * * RunnerState(`Elixir.Glowworm.Models.Izhikevich.RunnerState`)
+ * * RunnerState(`Elixir.Glowworm.SomaRunner.RunnerState`)
  *
  * return: `{NeuronState, RunnerState}`
  *

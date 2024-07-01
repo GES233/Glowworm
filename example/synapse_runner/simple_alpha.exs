@@ -4,7 +4,7 @@ defmodule SimpleSynapse do
 
   @timestep 0.01
   @frame_count 512
-  @total_frame 64
+  @total_frame 20
   @g_amp 5.0
   @spike_map [0, 5000, 5200, 5350]
 
