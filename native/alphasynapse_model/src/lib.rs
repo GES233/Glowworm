@@ -39,7 +39,7 @@ struct NifResult {
 }
 
 fn dg(g: f64, h: f64, tau: f64) -> f64 {
-    (E * g - h) / tau
+    (E * h - g) / tau
 }
 
 fn dh(h: f64, tau: f64) -> f64 {
@@ -98,8 +98,8 @@ fn nextstep(param: Param, state: SynapticState, input: Atom, runner: RunnerState
         dg(state.g + k3.0 * time_step, state.h + k3.1 * time_step, tau),
         dh(state.h + k3.1 * time_step, tau),
     );
-    let next_g: f64 = k4.0;
-    let mut next_h: f64 = k4.1;
+    let next_g: f64 = state.g + (k1.0 + 2.0 * k2.0 + 2.0 * k3.0 + k4.0) * time_step / 6.0;
+    let mut next_h: f64 = state.h + (k1.1 + 2.0 * k2.1 + 2.0 * k3.1 + k4.1) * time_step / 6.0;
 
     // callback
     if spike {
