@@ -8,7 +8,6 @@ struct Param {
     c: f64,
     tau: f64,
     peak_threshold: f64,
-    timestep: f64,
     reset_value: f64,
     reset_strategy: Atom,
 }
@@ -26,6 +25,7 @@ mod valid_reset_strategy {
 struct RunnerState {
   pub event: Atom,
   pub counter: u8,
+  pub timestep: f64,
 }
 
 #[derive(Debug, NifStruct)]
@@ -51,9 +51,9 @@ struct NifResult {
 // fn dv(_current_potential: f64, _current_i: f64, _current_remain_time: f64, _param: Param) -> (f64, f64) {(0.0, 0.0)}
 
 #[rustler::nif]
-fn nextstep(param: Param, state: NeuronState, _input: InputState, runner: RunnerState) -> NifResult {
+fn nextstep(_param: Param, state: NeuronState, _input: InputState, runner: RunnerState) -> NifResult {
     // 1. Parse param.
-    let _timestep: f64 = param.timestep;
+    let _timestep: f64 = runner.timestep;
 
     // 2. Calc next step.
     // use eula method.
@@ -65,7 +65,8 @@ fn nextstep(param: Param, state: NeuronState, _input: InputState, runner: Runner
         neuron: state,
         runner: RunnerState{
             event: runner.event,
-            counter: runner.counter + 1
+            counter: runner.counter + 1,
+            timestep: runner.timestep
         }
     }
 }
