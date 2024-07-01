@@ -81,9 +81,12 @@ defmodule Glowworm.SomaRunner.RunnerState do
   @moduledoc """
   Only used for soma runner.
   """
+
+  # TODO: Add timestep here.
   @type t :: %__MODULE__{
           event: atom(),
-          counter: non_neg_integer()
+          counter: non_neg_integer(),
+          timestep: number()
         }
-  defstruct [:counter, event: nil]
+  defstruct [:counter, :timestep, event: nil]
 end

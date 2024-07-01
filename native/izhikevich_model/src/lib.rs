@@ -9,7 +9,6 @@ struct Param {
     c: f64,
     d: f64,
     peak_threshold: f64,
-    timestep: f64,
 }
 
 #[derive(Debug, NifStruct)]
@@ -37,6 +36,7 @@ mod event_atom {
 struct RunnerState {
   pub event: Atom,
   pub counter: u8,
+  pub timestep: f64,
 }
 
 #[derive(NifTuple)]
@@ -80,7 +80,8 @@ fn runner_state_oprate(runner: RunnerState, peak: bool) -> RunnerState {
 
     RunnerState{
         event: event,
-        counter: next_counter
+        counter: next_counter,
+        timestep: runner.timestep,
     }
 }
 
@@ -106,7 +107,7 @@ fn nextstep(param: Param, state: NeuronState, input: InputState, runner: RunnerS
     // 0. Parse param
     let current: (f64, f64) = (state.potential, state.recovery);
     let current_i: f64 = input.current;
-    let time_step: f64 = param.timestep;
+    let time_step: f64 = runner.timestep;
     // 1. Calculate nextstep
     let k1: (f64, f64) = (
         dv(current.0, current.1, current_i),

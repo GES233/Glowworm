@@ -21,10 +21,6 @@ defmodule Glowworm.Models.Izhikevich.Param do
   `u` caused by slow high-threshold Na+ and K+ conductance.
 
   Except above, has `peak_threshold` field to set the threshold of reset.
-
-  ### Simulation
-
-  * `time_step`
   """
 
   @type t :: %__MODULE__{
@@ -33,8 +29,7 @@ defmodule Glowworm.Models.Izhikevich.Param do
           c: number(),
           d: number(),
           peak_threshold: number(),
-          timestep: number()
         }
-  @enforce_keys [:timestep]
-  defstruct [:timestep, a: 0.02, b: 0.2, c: -65.0, d: 8.0, peak_threshold: 30.0]
+  # @enforce_keys [:timestep]
+  defstruct [a: 0.02, b: 0.2, c: -65.0, d: 8.0, peak_threshold: 30.0]
 end

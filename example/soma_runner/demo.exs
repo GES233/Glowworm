@@ -1,5 +1,5 @@
 defmodule Demo do
-  # alias Glowworm.SomaRunner.RunnerState
+  alias Glowworm.SomaRunner.RunnerState, as: Runner
   alias Glowworm.Models.Izhikevich, as: I
 
   @timestep 0.01
@@ -56,10 +56,10 @@ defmodule Demo do
     # Used for no change.
 
     {new_neuron, new_runner} = I.nextstep(
-      %I.Param{timestep: @timestep, c: -50.0, d: 2.0}, # chattering
+      %I.Param{c: -50.0, d: 2.0}, # chattering
       neuron,
       %I.InputState{current: current},
-      runner
+      %Runner{runner | timestep: @timestep}
     )
 
     if get_inspector(:pulse) do
