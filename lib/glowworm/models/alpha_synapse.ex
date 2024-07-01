@@ -5,8 +5,9 @@ defmodule Glowworm.Models.AlphaSynapse do
   """
   # Refrences https://www.tusharchauhan.com/writing/models-of-synaptic-conductance-ii/
   use Rustler,
-  otp_app: :glowworm,
-  crate: :bi_exp_syn_model
+    otp_app: :glowworm,
+    crate: :alphasynapse_model
+
   @behaviour Glowworm.Models
 
   def nextstep(_param, _state, _input, _runner_state), do: :erlang.nif_error(:nif_not_loaded)
@@ -21,14 +22,15 @@ defmodule Glowworm.Models.AlphaSynapse.Param do
   * `g_amp`  # H_0 also.
   """
   @type t :: %__MODULE__{
-    tau: number(),
-    g_amp: number(),
-  }
+          tau: number(),
+          g_amp: number()
+        }
   defstruct [:tau, :g_amp]
 end
 
 defmodule Glowworm.Models.AlphaSynapse.SpikeState do
   @moduledoc false
+  # Reserved.
 end
 
 defmodule Glowworm.Models.AlphaSynapse.SynapticState do

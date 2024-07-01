@@ -21,7 +21,7 @@ defmodule Glowworm.Neuron do
   @type neuron_state :: :activate | :resting
   @type t :: %__MODULE__{
     config: Glowworm.Neuron.Config.t(),
-    activate_runner: %{atom() => maybe_improper_list(pid())},
+    activate_runner: %{atom() => list(pid())},
     state: Glowworm.Neuron.State.t()
   }
 

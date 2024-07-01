@@ -19,7 +19,7 @@ defmodule Glowworm.Models do
   @typedoc """
   Extra singal or simulation of model.
   """
-  @type input :: map() | struct()
+  @type input :: map() | struct() | atom()
 
   @typedoc """
   Runner state(implementation-agnostic).
