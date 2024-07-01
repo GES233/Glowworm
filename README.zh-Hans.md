@@ -63,7 +63,7 @@ TODO: until project finished.
 - [ ] 运行组件
   - [x] Izhikevich 模型
   - [ ] LIF 模型
-  - [ ] 突触建模
+  - [x] 突触建模
   - [ ] 具有神经可塑性的突触
 - [ ] 神经元
   - [ ] 完整的 `NeuronState` （不依赖于运行部分）
