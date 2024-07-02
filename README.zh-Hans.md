@@ -70,6 +70,7 @@ TODO: until project finished.
     - LTP（暂时不考虑）
   - [ ] LIF 模型
 - [ ] 神经元
+  - [ ] 考虑到 `Runner`
   - [ ] 完整的 `NeuronState` （不依赖于运行部分）
   - [ ] 将神经元变为进程并且通过通信来实现交流
   - [ ] 进程监控
