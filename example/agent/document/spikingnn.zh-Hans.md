@@ -329,7 +329,7 @@ Space8["注意力形成空间"] --> Space15
 
 见下图：
 
-![img](/example/agent/assets/overview.png)
+![img](/example/agent/document/assets/overview.png)
 
 ### 抑-缓调控：
 
