@@ -7,62 +7,41 @@ defmodule Glowworm.SomaRunner do
   * Send event to `Neuron` if `pulse`
   * Adjust timestep
   """
-  use Task
+  alias Glowworm.SomaRunner.RunnerState, as: R
+  use Agent
 
-  ## Configuration.
-  @type conf :: %{
-          modules: %{
-            param: atom(),
-            input: atom(),
-            state: atom(),
-            runner: atom()
-          },
-          model: atom(),
-          param: map() | struct(),
-        }
+  @type neuron_id :: atom()
+  @type model_param :: map() | struct()
+  @type soma_model_state :: map() | struct()
+  @type current_state :: map() | struct()
 
-  @runner_model :soma_runner_model
-  @model_params :soma_runner_module_param
-  @model_modules [:param, :input, :state, :runner]
-  @default_model Glowworm.Models.Izhikevich
-  @default_modules %{
-    param: Glowworm.Models.Izhikevich.Param,
-    input: Glowworm.Models.Izhikevich.InputState,
-    state: Glowworm.Models.Izhikevich.NeuronState,
-    runner: Glowworm.SomaRunner.RunnerState
-  }
-  # @steps_number_per_frame 0xff  # Includes 0.
+  @type conf %{init_current: current_state(), state_init: soma_model_state(), param: model_param()}
 
-  defp default_module(), do: @default_modules |> Enum.map(fn {k, v} -> {k, v} end)
+  @type state {model_param(), current_state(), soma_model_state(), R.t()}
 
-  defp get_module(_conf_map = %{modules: modules}) , do: modules
-  defp get_module(opts) do
-    @model_modules
-    |> Enum.map(fn field -> {field, Keyword.get(opts ++ default_module(), field)} end)
-    |> Map.new()
-  end
+  @spec start_link(neuron_id(), conf()) :: {:ok, pid()}
+  def start_link(neuron_id, conf), do:
+    Agent.start_link(fn -> state(conf) end, name: {__MODULE__, neuron_id})
 
-  defp get_model(_conf_map = %{model: model}) , do: model
-  defp get_model(opts), do: Keyword.get(opts, @runner_model, @default_model)
+  @spec init_state(conf()) :: state()
+  def init_state(_conf) do
+    # TODO:
 
-  defp get_param(_conf_map = %{params: params}) , do: params
-  defp get_param(opts), do: Keyword.get(opts, @model_params)
-
-  def start_link(args), do: Task.start_link(__MODULE__, :run, args)
-
-  def run({opts}) do
-    ## Load runner.
-    _runner_module_name = get_module(opts)
-    _runner_model = get_model(opts)
-    _runner_params = get_param(opts)
+    {}
   end
 
   # Simulation.
 
-  # get_current(), do: nil
-  # get_neuron_state(), do: nil
-  # if has not state(e.g. when initialize) => ...
-  # else => when currrent state
+  def get_current() do
+    receive do
+      {:current, value} -> nil
+        # code
+      _ -> nil
+    end
+    get_current()
+  end
+
+  def get_neuron_state(), do: Agent.get()
 
   # Wrap `Models.next_step/4`
   def do_single_step() do

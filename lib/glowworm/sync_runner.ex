@@ -3,13 +3,13 @@ defmodule Glowworm.Neuron.SyncRunner do
   Intergrate all runners and running it
   in a synchrone method.
   """
-  use Task
+  use Agent
 
   #alias Glowworm.SomaRunner.RunnerState, as: SomaState
   #alias Glowworm.SynapseRunner.RunnerState, as: SynState
 
   def start_link(args) do
-    Task.start_link(__MODULE__, :run, [args])
+    Agent.start_link(__MODULE__, :run, [args])
   end
 
   defp get_soma(), do: nil
