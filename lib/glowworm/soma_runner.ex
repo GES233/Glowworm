@@ -15,27 +15,38 @@ defmodule Glowworm.SomaRunner do
   @type soma_state :: map() | struct()
   @type current_state :: map() | struct() | number()
 
-  @type conf :: %{param: model_param(), model: atom() | module()}
-  @type init_state :: %{current: current_state(), soma: soma_state(), runner: runner_state()}
-  @type state :: {atom(), model_param(), current_state(), soma_state(), R.t()}
+  # stable.
+  @type conf :: %{
+          param: model_param(),
+          model: atom() | module(),
+          # Send RunnerState to.
+          send: pid() | nil,
+          # Send soma's state to(usually used when inspect.)
+          inspect: pid() | nil
+        }
+  # always update when running.
+  @type init_state :: %{current: current_state(), soma: soma_state(), runner: R.t()}
+  @type state ::
+          {atom(), model_param(), current_state(), soma_state(), R.t(),
+           %{send: pid() | nil, inspect: pid() | nil}}
 
   def child_spec(_arg) do
     {}
   end
 
   @spec start_link(neuron_id(), conf(), init_state()) :: {:ok, pid()}
-  def start_link(neuron_id, conf, init),
+  def start_link(_neuron_id, conf, init),
     do: Agent.start_link(fn -> get_init_state(conf, init) end, name: __MODULE__)
 
   defp get_init_state(conf, init) do
-    {conf[:model], conf[:param], init[:current], init[:soma], init[:runner]}
+    {conf[:model], conf[:param], init[:current], init[:soma], init[:runner], %{send: conf[:send], inspect: conf[:inspect]}}
   end
 
   # Simulation.
 
   def get_current() do
     receive do
-      {:current, value} -> nil
+      {:current, _value} -> nil
       # code
       _ -> nil
     end

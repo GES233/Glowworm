@@ -21,3 +21,7 @@ Ratio: 113.20266723632812.
 ```
 
 ![pic](/example/soma_runner/Izhikevich_chattering.png)
+
+## SomaRunner as an Agent
+
+TODO: Add description, usecase and result.
