@@ -12,22 +12,23 @@ defmodule Glowworm.SomaRunner do
 
   @type neuron_id :: atom()
   @type model_param :: map() | struct()
-  @type soma_model_state :: map() | struct()
-  @type current_state :: map() | struct()
+  @type soma_state :: map() | struct()
+  @type current_state :: map() | struct() | number()
 
-  @type conf %{init_current: current_state(), state_init: soma_model_state(), param: model_param()}
+  @type conf :: %{param: model_param(), model: atom() | module()}
+  @type init_state :: %{current: current_state(), soma: soma_state(), runner: runner_state()}
+  @type state :: {atom(), model_param(), current_state(), soma_state(), R.t()}
 
-  @type state {model_param(), current_state(), soma_model_state(), R.t()}
-
-  @spec start_link(neuron_id(), conf()) :: {:ok, pid()}
-  def start_link(neuron_id, conf), do:
-    Agent.start_link(fn -> state(conf) end, name: {__MODULE__, neuron_id})
-
-  @spec init_state(conf()) :: state()
-  def init_state(_conf) do
-    # TODO:
-
+  def child_spec(_arg) do
     {}
+  end
+
+  @spec start_link(neuron_id(), conf(), init_state()) :: {:ok, pid()}
+  def start_link(neuron_id, conf, init), do:
+    Agent.start_link(fn -> get_init_state(conf, init) end, name: __MODULE__)
+
+  defp get_init_state(conf, init) do
+    {conf[:model], conf[:param], init[:current], init[:soma], init[:runner]}
   end
 
   # Simulation.
@@ -41,8 +42,6 @@ defmodule Glowworm.SomaRunner do
     get_current()
   end
 
-  def get_neuron_state(), do: Agent.get()
-
   # Wrap `Models.next_step/4`
   def do_single_step() do
     # ...
@@ -54,6 +53,14 @@ defmodule Glowworm.SomaRunner do
   #   do_some_stuff(send data to Neuron)
   # - when pulse =>
   #   do_some_stuff(send event to Neuron)
+
+  ## Inspect
+
+  def get_runner_state() do
+    Agent.get(__MODULE__, fn {_, _, _, _, state} -> state end)
+  end
+
+  # send frame to Neuron.
 end
 
 defmodule Glowworm.SomaRunner.RunnerState do

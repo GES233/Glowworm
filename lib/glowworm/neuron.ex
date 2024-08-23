@@ -48,6 +48,8 @@ defmodule Glowworm.Neuron do
   def init([]) do
     {:ok, :idle, ""}
   end
+
+  def whoaimi(), do: self()
 end
 
 defmodule Glowworm.Neuron.Config do
@@ -58,10 +60,11 @@ defmodule Glowworm.Neuron.Config do
   @type model_name :: module() | atom()
   @type model_param :: struct() | map()
   @type model_conf :: %{:name => model_name(), :param => model_param()}
-  @type runner_conf :: map()
+  @type syn_runner_conf :: map()
+  @type soma_runner_conf :: map() # Glowworm.SomaRunner.conf()
   @type t :: %__MODULE__{
           synapse: %{atom() => {runner_conf(), model_conf()}},
-          soma: {runner_conf(), model_conf()}
+          soma: {soma_runner_conf(), model_conf()}
         }
   defstruct [:synapse, :soma]
 end
