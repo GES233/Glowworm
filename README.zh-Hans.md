@@ -39,20 +39,7 @@
 
 项目架构如下图展示：
 
-```mermaid
-graph TD
-  Application["应用（Application）"] --> NeuronSupervisor["神经元监视器（NeuronSupervisor）"]
-  NeuronSupervisor --1..n--> Neuron["神经元（Neuron） GenServer"]
-  Application --> PortScheduler("端口管理器（PortScheduler）")
-  PortScheduler --1..m--> Port("端口（Port）")
-  Port <-.刺激或记录.-> Neuron
-  Neuron <-.神经元之间的通信.-> Neuron
-  Neuron --> SomaRunner("神经元状态的仿真（SomaRunner） :gen_statem")
-  Neuron --> SynapseRunner("突触的仿真（SynapseRunner） :gen_statem")
-  SynapseRunner -.输入电流.-> SomaRunner
-  Models["模型（通常用 NIF 实现）"] -.require.-> SomaRunner
-  Models["模型（通常用 NIF 实现）"] -.require.-> SynapseRunner
-```
+![img](/assets/Glowworm-arch-zh.png)
 
 ### 神经网络的架构
 
