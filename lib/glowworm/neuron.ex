@@ -61,7 +61,8 @@ defmodule Glowworm.Neuron.Config do
   @type model_param :: struct() | map()
   @type model_conf :: %{:name => model_name(), :param => model_param()}
   @type syn_runner_conf :: map()
-  @type soma_runner_conf :: map() # Glowworm.SomaRunner.conf()
+  # Glowworm.SomaRunner.conf()
+  @type soma_runner_conf :: map()
   @type t :: %__MODULE__{
           synapse: %{atom() => {runner_conf(), model_conf()}},
           soma: {soma_runner_conf(), model_conf()}

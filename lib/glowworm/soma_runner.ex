@@ -24,8 +24,8 @@ defmodule Glowworm.SomaRunner do
   end
 
   @spec start_link(neuron_id(), conf(), init_state()) :: {:ok, pid()}
-  def start_link(neuron_id, conf, init), do:
-    Agent.start_link(fn -> get_init_state(conf, init) end, name: __MODULE__)
+  def start_link(neuron_id, conf, init),
+    do: Agent.start_link(fn -> get_init_state(conf, init) end, name: __MODULE__)
 
   defp get_init_state(conf, init) do
     {conf[:model], conf[:param], init[:current], init[:soma], init[:runner]}
@@ -36,9 +36,10 @@ defmodule Glowworm.SomaRunner do
   def get_current() do
     receive do
       {:current, value} -> nil
-        # code
+      # code
       _ -> nil
     end
+
     get_current()
   end
 

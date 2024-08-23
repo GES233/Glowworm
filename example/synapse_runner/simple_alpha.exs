@@ -13,12 +13,12 @@ defmodule SimpleSynapse do
 
   def get_pulse(ct) do
     if (get_total() - ct) in @spike_map do
-        IO.puts(ct)
+      IO.puts(ct)
 
-        :pulse
-      else
-        nil
-      end
+      :pulse
+    else
+      nil
+    end
   end
 
   def calc(s, 0),
@@ -56,16 +56,18 @@ defmodule SimpleSynapse do
   end
 end
 
-{time, res} = :timer.tc(&SimpleSynapse.calc/2, [
-  [
-    {
-      %Glowworm.Models.AlphaSynapse.SynapticState{g: 0.0, h: 0.0},
-      %Glowworm.SynapseRunner.RunnerState{current: 0.0, counter: 0, timestep: 0.01},
-      nil
-    }
-  ],
-  SimpleSynapse.get_total()
-])
+{time, res} =
+  :timer.tc(&SimpleSynapse.calc/2, [
+    [
+      {
+        %Glowworm.Models.AlphaSynapse.SynapticState{g: 0.0, h: 0.0},
+        %Glowworm.SynapseRunner.RunnerState{current: 0.0, counter: 0, timestep: 0.01},
+        nil
+      }
+    ],
+    SimpleSynapse.get_total()
+  ])
+
 IO.puts("Running #{length(res)} steps for #{time} ms.")
 
 split = fn item ->
@@ -78,15 +80,19 @@ line = fn {state, pulse} ->
   "#{Float.to_string(state.g)},#{Float.to_string(state.h)},#{Atom.to_string(pulse)}"
 end
 
-raw = Enum.map(res, split)
-|> Enum.map(line)
-|> Enum.join("\n")
+raw =
+  Enum.map(res, split)
+  |> Enum.map(line)
+  |> Enum.join("\n")
 
 type = "alpha_g"
 
-:ok = File.write(
-  "example/synapse_runner/#{type}_temp.csv",
-  "g,h,spike\n" <> raw
-)
+:ok =
+  File.write(
+    "example/synapse_runner/#{type}_temp.csv",
+    "g,h,spike\n" <> raw
+  )
 
-Mix.Shell.IO.cmd("python example/synapse_runner/show.py --type #{type} --count #{length(res)} --timestep #{SimpleSynapse.get_timestep()}")
+Mix.Shell.IO.cmd(
+  "python example/synapse_runner/show.py --type #{type} --count #{length(res)} --timestep #{SimpleSynapse.get_timestep()}"
+)

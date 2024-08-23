@@ -3,9 +3,9 @@ defmodule Demo do
   Demo document of whole neuron.
   """
 
-  #alias Glowworm.Neuron
-  #alias Glowworm.SomaRunner, as: Soma
-  #alias Glowworm.SynapseRunner, as: Synapse
+  # alias Glowworm.Neuron
+  # alias Glowworm.SomaRunner, as: Soma
+  # alias Glowworm.SynapseRunner, as: Synapse
 
   def action(), do: nil
 end

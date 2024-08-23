@@ -3,6 +3,6 @@ defmodule Mix.Tasks.SNN.Run do
 
   @impl true
   def run(_args) do
-    IO.puts "Hello world."
+    IO.puts("Hello world.")
   end
 end

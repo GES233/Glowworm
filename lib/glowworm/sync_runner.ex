@@ -5,8 +5,8 @@ defmodule Glowworm.Neuron.SyncRunner do
   """
   use Agent
 
-  #alias Glowworm.SomaRunner.RunnerState, as: SomaState
-  #alias Glowworm.SynapseRunner.RunnerState, as: SynState
+  # alias Glowworm.SomaRunner.RunnerState, as: SomaState
+  # alias Glowworm.SynapseRunner.RunnerState, as: SynState
 
   def start_link(args) do
     Agent.start_link(__MODULE__, :run, [args])

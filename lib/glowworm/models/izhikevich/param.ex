@@ -28,8 +28,8 @@ defmodule Glowworm.Models.Izhikevich.Param do
           b: number(),
           c: number(),
           d: number(),
-          peak_threshold: number(),
+          peak_threshold: number()
         }
   # @enforce_keys [:timestep]
-  defstruct [a: 0.02, b: 0.2, c: -65.0, d: 8.0, peak_threshold: 30.0]
+  defstruct a: 0.02, b: 0.2, c: -65.0, d: 8.0, peak_threshold: 30.0
 end
