@@ -3,7 +3,7 @@
 ## Izhikevich model
 
 ```
-~playground/glowworm> mix run example/soma_runner/demo.exs
+~playground/glowworm> mix run example/soma_runner/izh_demo.exs
 Start inject current at 1536(15.36ms).
 Pulse at 10525(105.25ms).
 Pulse at 10722(107.22ms).

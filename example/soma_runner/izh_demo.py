@@ -12,14 +12,14 @@ parser.add_argument("--timestep")
 
 if __name__ == "__main__":
     # Command like
-    # python example/soma_runner/demo.py
+    # python example/soma_runner/izh_demo.py
     # --count #{length(res)} --timestep #{Demo.get_timestep()}
     args = parser.parse_args()
 
     TOTAL_COUNT = int(args.count)
     TIMESTEP = float(args.timestep)
 
-    file = Path.cwd() / "example/soma_runner/r_temp.csv"
+    file = Path.cwd() / "example/soma_runner/izh_model_temp.csv"
 
     df = pd.read_csv(file)
     # cycles / timestep, timestep

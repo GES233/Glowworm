@@ -158,10 +158,10 @@ raw =
 
 :ok =
   File.write(
-    "example/soma_runner/r_temp.csv",
+    "example/soma_runner/izh_model_temp.csv",
     "v,u\n" <> raw
   )
 
 Mix.Shell.IO.cmd(
-  "python example/soma_runner/demo.py --count #{length(res)} --timestep #{Demo.get_timestep()}"
+  "python example/soma_runner/izh_demo.py --count #{length(res)} --timestep #{Demo.get_timestep()}"
 )
