@@ -27,22 +27,51 @@ defmodule Glowworm.SomaRunner do
   # always update when running.
   @type init_state :: %{current: current_state(), soma: soma_state(), runner: R.t()}
   @type state ::
-          {atom(), model_param(), current_state(), soma_state(), R.t(),
+          {atom(), model_param(), soma_state(), current_state(), R.t(),
            %{send: pid() | nil, inspect: pid() | nil}}
 
-  def child_spec(_arg) do
-    {}
+  def child_spec(arg) do
+    {neuron_id, conf, init} = arg
+
+    %{
+      id: neuron_id,
+      start: {__MODULE__, :start_link, [neuron_id, conf, init]},
+      type: :worker
+    }
+  end
+
+  defp get_init_state(conf, init) do
+    {conf[:model], conf[:param], init[:soma], init[:current], init[:runner],
+     %{send: conf[:send], inspect: conf[:inspect]}}
   end
 
   @spec start_link(neuron_id(), conf(), init_state()) :: {:ok, pid()}
-  def start_link(_neuron_id, conf, init),
-    do: Agent.start_link(fn -> get_init_state(conf, init) end, name: __MODULE__)
-
-  defp get_init_state(conf, init) do
-    {conf[:model], conf[:param], init[:current], init[:soma], init[:runner], %{send: conf[:send], inspect: conf[:inspect]}}
+  def start_link(neuron_id, conf, init) do
+    soma_name = String.to_atom("soma_#{neuron_id}")
+    Agent.start_link(fn -> get_init_state(conf, init) end, name: soma_name)
   end
 
+  # TODO: add id_to_pid
+
   # Simulation.
+
+  def activate(_neuron_id), do: nil
+
+  def deactivate(_neuron_id), do: nil
+
+  def run() do
+    # ?current.
+
+    # Execute one step.
+
+    # ?inspector
+
+    # ?event
+  end
+
+  def stop(pid) do
+    Agent.stop(pid)
+  end
 
   def get_current() do
     receive do
@@ -54,22 +83,37 @@ defmodule Glowworm.SomaRunner do
     get_current()
   end
 
-  # Wrap `Models.next_step/4`
-  def do_single_step() do
-    # ...
+  @spec do_next_step(state()) :: {{soma_state(), R.t()}, state()}
+  def do_next_step(state) do
+    {model, param, soma, current, runner, conn} = state
+
+    # Wrap `Models.next_step/4`
+    {next_soma, next_runner} = apply(model, :nextstep, [param, soma, current, runner])
+
+    %{
+      res: {next_soma, next_runner},
+      state: {model, param, next_soma, current, next_runner, conn}
+    }
   end
 
-  # Implemented runner prototype in `Demo`.
-  # - continous calculate with recursion
-  # - when counter = 0 =>
-  #   do_some_stuff(send data to Neuron)
-  # - when pulse =>
-  #   do_some_stuff(send event to Neuron)
+  def do_single_step(pid) do
+    Agent.get_and_update(pid, fn state ->
+      {do_next_step(state)[:res], do_next_step(state)[:state]}
+    end)
+  end
 
   ## Inspect
 
+  # todo: make private
+  def do_inspect(state) do
+    {_, _, _, soma, _, conn} = state
+
+    # TODO: finish communicate spec.
+    send(conn[:inspect], {:soma, soma})
+  end
+
   def get_runner_state() do
-    Agent.get(__MODULE__, fn {_, _, _, _, state} -> state end)
+    Agent.get(__MODULE__, fn {_, _, _, runner_state, _} -> runner_state end)
   end
 
   # send frame to Neuron.

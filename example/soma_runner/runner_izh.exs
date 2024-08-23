@@ -2,11 +2,20 @@ alias Glowworm.Models.Izhikevich, as: I
 alias Glowworm.SomaRunner.RunnerState, as: R
 
 defmodule CurrentInjector do
-  @spec do_inject(pid(), number()) :: :ok | {:error, term()}
-  def do_inject(_target_soma, _current) do
-    # send(_target_soma, _current)
+  @scheduler [
+    150,
+    165,
+    172,
+  ]
 
-    :ok
+  def scheduler(), do: @scheduler
+
+  @spec do_inject(pid(), number()) :: :ok | {:error, term()}
+  def do_inject(target_soma, current) do
+    # current to input.
+    state = Agent.get(target_soma, fn {_, _, _, current, _, _} -> current end)
+
+    send(target_soma, %{state | current: current})
   end
 end
 
@@ -19,7 +28,7 @@ defmodule Recorder do
   end
 
   def record(agent, data) do
-    Agent.update(agent, fn state -> state ++ [data] end)
+    Agent.update(agent, fn state -> [data | state] end)
   end
 
   def run() do
@@ -49,10 +58,12 @@ init = %{
   runner: %R{counter: 0, timestep: 0.01}
 }
 
-{:ok, soma_runner} = Glowworm.SomaRunner.start_link(conf, init)
+## Test: single step.
+Glowworm.SomaRunner.do_single_step(soma_runner) |> IO.inspect()
 
-## Do some stuff
+## Test: add injector.
 
+## Terminate agent.
 :ok = Agent.stop(soma_runner)
 
 ## Do other stuff
