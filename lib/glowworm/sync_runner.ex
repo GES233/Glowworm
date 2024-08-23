@@ -8,8 +8,18 @@ defmodule Glowworm.Neuron.SyncRunner do
   # alias Glowworm.SomaRunner.RunnerState, as: SomaState
   # alias Glowworm.SynapseRunner.RunnerState, as: SynState
 
-  def start_link(args) do
-    Agent.start_link(__MODULE__, :run, [args])
+  def start_link(neuron_id, args) do
+    Agent.start_link(__MODULE__, :run, [args], name: neuron_id)
+  end
+
+  def child_spec(arg) do
+    {neuron_id, other} = arg
+
+    %{
+      id: neuron_id,
+      start: {__MODULE__, :start_link, [neuron_id, other]},
+      type: :worker
+    }
   end
 
   defp get_soma(), do: nil

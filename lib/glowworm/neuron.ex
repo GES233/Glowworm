@@ -13,43 +13,16 @@ defmodule Glowworm.Neuron do
   blocked and no function invoked;
   when in `activated`, runners will work.
   """
-  alias Glowworm.Neuron, as: N
+  # use GenServer
+  # Serveral runners are client.
 
-  alias :gen_statem, as: GenStateM
-  @behaviour GenStateM
+  # init
 
-  @type neuron_id :: pid() | atom()
-  @type neuron_config :: N.Config.t()
-  @type neuron_conn :: N.Conn.t()
-  @type neuron_state :: :activate | :resting
-  @type t :: %__MODULE__{
-          config: Glowworm.Neuron.Config.t(),
-          activate_runner: %{atom() => list(pid())},
-          state: Glowworm.Neuron.State.t()
-        }
+  # handle_call
 
-  defstruct [:config, :activate_runner, :state]
+  # handle_cast
 
-  def start_link(args) do
-    # TODO: Parse args.
-    # Load config.
-    # Set initial state.
-
-    GenStateM.start_link(__MODULE__, args, [])
-  end
-
-  # Type of runners and params.
-
-  def callback_mode(),
-    # - :state_functions
-    # - :handle_event_function
-    do: :state_functions
-
-  def init([]) do
-    {:ok, :idle, ""}
-  end
-
-  def whoaimi(), do: self()
+  # handle_info
 end
 
 defmodule Glowworm.Neuron.Config do

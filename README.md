@@ -19,13 +19,13 @@ Architecture of application like following graph:
 ```mermaid
 graph TD
   Application --> NeuronSupervisor
-  NeuronSupervisor --1..n--> Neuron["Neuron :gen_statem"]
+  NeuronSupervisor --1..n--> Neuron["Neuron GenServer"]
   Application --> PortScheduler("PortScheduler")
   PortScheduler --1..m--> Port("Port")
   Port <-.simulus or record.-> Neuron
   Neuron <-.communication.-> Neuron
-  Neuron --> SomaRunner("SomaRunner Agent")
-  Neuron --> SynapseRunner("SynapseRunner Agent")
+  Neuron --> SomaRunner("SomaRunner :gen_statem")
+  Neuron --> SynapseRunner("SynapseRunner :gen_statem")
   SynapseRunner -.current.-> SomaRunner
   Models -.require.-> SomaRunner
   Models -.require.-> SynapseRunner

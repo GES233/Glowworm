@@ -1,11 +1,7 @@
 defmodule Glowworm.SynapseRunner do
-  use Agent
+  # alias :gen_statem, as: GenStateM
 
-  def start_link(args), do: Agent.start_link(__MODULE__, :run, args)
-
-  def run({opts}) do
-    _runner_module = Keyword.get(opts, :runner_module)
-  end
+  # @behaviour GenStateM
 end
 
 defmodule Glowworm.SynapseRunner.RunnerState do
