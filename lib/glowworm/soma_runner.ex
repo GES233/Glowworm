@@ -30,6 +30,10 @@ defmodule Glowworm.SomaRunner do
           {atom(), model_param(), soma_state(), current_state(), R.t(),
            %{send: pid() | nil, inspect: pid() | nil}}
 
+  def neuron_id_to_pid(neuron_id) do
+    String.to_atom("#{neuron_id}_soma")
+  end
+
   def child_spec(arg) do
     {neuron_id, conf, init} = arg
 
@@ -45,13 +49,11 @@ defmodule Glowworm.SomaRunner do
      %{send: conf[:send], inspect: conf[:inspect]}}
   end
 
-  @spec start_link(neuron_id(), conf(), init_state()) :: {:ok, pid()}
+  @spec start_link(neuron_id() | number(), conf(), init_state()) :: {:ok, pid()}
   def start_link(neuron_id, conf, init) do
-    soma_name = String.to_atom("soma_#{neuron_id}")
+    soma_name = neuron_id_to_pid(neuron_id)
     Agent.start_link(fn -> get_init_state(conf, init) end, name: soma_name)
   end
-
-  # TODO: add id_to_pid
 
   # Simulation.
 
@@ -59,14 +61,31 @@ defmodule Glowworm.SomaRunner do
 
   def deactivate(_neuron_id), do: nil
 
-  def run() do
+  def run(pid) do
+    {_model, _param, _soma, _current, _runner, conn} = Agent.get(pid, &(&1))
+
+    # Execute one step and update.
+    Agent.update(pid, &do_next_step/1)
+
+    case conn do
+      # ?inspector
+      %{inspect: nil} -> nil
+      %{inspect: _} -> do_inspect(Agent.get(pid, &(&1)))
+
+      # ?send
+      %{send: nil} -> nil
+      %{send: send} -> send(send, get_runner_state())
+    end
+
     # ?current.
+    # TODO: Add no blocking method.
 
-    # Execute one step.
+    # ?halt.
+    if false do
+      stop(pid)
+    end
 
-    # ?inspector
-
-    # ?event
+    run(pid)
   end
 
   def stop(pid) do
@@ -79,8 +98,6 @@ defmodule Glowworm.SomaRunner do
       # code
       _ -> nil
     end
-
-    get_current()
   end
 
   @spec do_next_step(state()) :: {{soma_state(), R.t()}, state()}

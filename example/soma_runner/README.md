@@ -24,4 +24,8 @@ Ratio: 113.20266723632812.
 
 ## SomaRunner as an Agent
 
+```mermaid
+injector["Current Injector"] --current--> soma["SomaRunner"]
+```
+
 TODO: Add description, usecase and result.

@@ -16,6 +16,8 @@ defmodule CurrentInjector do
     state = Agent.get(target_soma, fn {_, _, _, current, _, _} -> current end)
 
     send(target_soma, %{state | current: current})
+
+    :ok
   end
 end
 
@@ -24,7 +26,7 @@ defmodule Recorder do
   # Record state during agent running.
 
   def start_link do
-    Agent.start_link(fn -> [] end)
+    Agent.start_link(fn -> [] end, name: __MODULE__)
   end
 
   def record(agent, data) do
@@ -45,11 +47,13 @@ defmodule Recorder do
 
 end
 
+{:ok, recorder} = Recorder.start_link()
+
 conf = %{
   model: I,
   param: %I.Param{c: -50.0, d: 2.0},
   send: nil,
-  inspect: nil
+  inspect: recorder
 }
 
 init = %{
