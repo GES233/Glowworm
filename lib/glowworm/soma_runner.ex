@@ -26,11 +26,11 @@ defmodule Glowworm.SomaRunner do
 
   alias Glowworm.Models, as: M
   alias Glowworm.SomaRunner, as: R
-  # alias :gen_statem, as: GenStateM
+  alias :gen_statem, as: GenStateM
   # About gen_statem, see:
   # https://meraj-gearhead.ca/state-machine-in-elixir-using-erlangs-genstatem-behaviour
 
-  # @behaviour GenStateM
+  @behaviour GenStateM
 
   @type state :: :idle | :running
   @type container :: {M.param(), M.state(), M.input(), R.RunnerState.t()}
@@ -41,6 +41,10 @@ defmodule Glowworm.SomaRunner do
     conn: %{event: pid() | nil, inspect: pid() | nil}
   }
 
+  @impl GenStateM
+  def callback_mode(), do:
+    :state_functions
+
   def child_spec(opts) do
     {neuron_id, args} = opts
 
@@ -48,6 +52,56 @@ defmodule Glowworm.SomaRunner do
       id: neuron_id,
       start: {__MODULE__, :start_link, [args]},
     }
+  end
+
+  def idle(state), do: state  # Do nothing.
+
+  ## Handle events
+
+  ## some inner functions.
+
+  @spec do_next_step(machine_state()) :: machine_state()
+  def do_next_step(state) do
+    {next_state, next_runner_state} = apply(state[:model], :nextstep, state[:container])
+    {param, _state, input, _runner_state} = state[:container]
+
+    %{state | container: {param, state, input, runner_state}}
+  end
+
+  @spec do_update_current(machine_state(), any(), function(any(), any())) :: machine_state()
+  def do_update_current(state, input, convert_func) do
+    {param, state, _prev_input, runner_state} = state[:container]
+
+    new_input = convert_func.(input)
+
+    %{state | container: {param, state, new_input, runner_state}}
+  end
+
+  @spec do_update_runner_state(machine_state(), R.t()) :: machine_state()
+  def do_update_runner_state(state, new_runner_state) do
+    {param, state, input, _runner_state} = state[:container]
+
+    %{state | container: {param, state, input, new_runner_state}}
+  end
+
+  # TODO: Add check halt spontaneously.
+  # Invoked when counter in runner equals zero.
+  @spec do_check_stable(machine_state()) :: machine_state()
+  def do_check_stable(state) do
+    {param, state, input, runner_state} = state[:container]
+
+    stable = apply(state[:model], :check_stable, [param, state, input])
+
+    # TODO: Add send event.
+
+    if(stable, do: %{state | state: :idle}, else: state)
+  end
+
+  # TODO: Ensure where is the neuron's id.
+  def do_send_pulse(state) do
+    {_param, _state, _input, runner_state} = state[:container]
+
+    {:event, {:pulse, runner_state}}
   end
 end
 

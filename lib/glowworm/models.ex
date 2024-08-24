@@ -48,5 +48,5 @@ defmodule Glowworm.Models do
   """
   @callback nextstep(param, state, input, runner_state) :: {state, runner_state}
 
-  # TODO: Add halt func
+  # TODO: Add check_stable.
 end
