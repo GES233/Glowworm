@@ -2,13 +2,22 @@ defmodule Glowworm.SomaRunner do
   @moduledoc """
   SomaRunner.
 
-  There're three states:
-  * `:idle` --> do nothing until has simulus.
-  * `:with_current` --> update I --> update S, R
-  * `:without_current` --> update S, R
+  ### Events received
 
-  where `I` means input current, `S` means soma's
-  state, and `R` means runner state.
+  * `{:activate, ...}` --> Initialize param, state, input, runner state
+  * `{:freeze, ...}` --> Deactivate from outside
+  * `{:event, ...}` --> Update Input
+  * `{:update, ...}` --> Update RunnerState
+
+  ### Events will send
+
+  * `{:event, ...}` --> Send pulse
+  * `{:state, ...}` --> Show state and runner state(used when inspect enabled)
+
+  ### State
+
+  * `:idle` --> do nothing until has stimulus or receive `:activate`.
+  * `:running` --> Running simulation, receive stimulus until `:freeze` or stable.
 
   when in activation(not in `:idle`), the runner has
   periodic event during counter of runner state is zero.
@@ -17,34 +26,20 @@ defmodule Glowworm.SomaRunner do
 
   alias Glowworm.Models, as: M
   alias Glowworm.SomaRunner, as: R
-  alias :gen_statem, as: GenStateM
+  # alias :gen_statem, as: GenStateM
   # About gen_statem, see:
   # https://meraj-gearhead.ca/state-machine-in-elixir-using-erlangs-genstatem-behaviour
 
-  @behaviour GenStateM
+  # @behaviour GenStateM
 
-  @type state :: :idle | :with_current | :without_current
+  @type state :: :idle | :running
   @type container :: {M.param(), M.state(), M.input(), R.RunnerState.t()}
   @type machine_state :: %{
     state: state(),
     container: container(),
-    # model name(atom).
-    # send and inspect related.
+    model: atom() | module(),
+    conn: %{event: pid() | nil, inspect: pid() | nil}
   }
-
-  @impl GenStateM
-  def callback_mode, do:
-    :handle_event_function
-
-  @impl GenStateM
-  def start_link(neuron_id, args) do
-    GenStateM.start_link(__MODULE__, args, name: neuron_id)
-  end
-
-  @impl GenStateM
-  def init(_args) do
-    {:ok, :init, nil}
-  end
 
   def child_spec(opts) do
     {neuron_id, args} = opts
@@ -61,7 +56,6 @@ defmodule Glowworm.SomaRunner.RunnerState do
   Only used for soma runner.
   """
 
-  # TODO: Add timestep here.
   @type t :: %__MODULE__{
           event: atom(),
           counter: non_neg_integer(),

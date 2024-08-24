@@ -55,4 +55,6 @@ defmodule Glowworm.Models do
   Every part of runner didn't get entire state.
   """
   @callback to_neuron(state, runner_state) :: Glowworm.Neuron.State.t()
+
+  # TODO: Add halt func
 end
