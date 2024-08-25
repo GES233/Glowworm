@@ -35,28 +35,38 @@ defmodule Glowworm.SomaRunner do
   @type state :: :idle | :running
   @type container :: {M.param(), M.state(), M.input(), R.RunnerState.t()}
   @type machine_state :: %{
-    state: state(),
-    container: container(),
-    model: atom() | module(),
-    conn: %{event: pid() | nil, inspect: pid() | nil}
-  }
+          state: state(),
+          container: container(),
+          model: atom() | module(),
+          conn: %{event: pid() | nil, inspect: pid() | nil}
+        }
 
   @impl GenStateM
-  def callback_mode(), do:
-    :state_functions
+  def callback_mode(), do: :state_functions
 
   def child_spec(opts) do
     {neuron_id, args} = opts
 
     %{
       id: neuron_id,
-      start: {__MODULE__, :start_link, [args]},
+      start: {__MODULE__, :start_link, [args]}
     }
   end
 
-  def idle(state), do: state  # Do nothing.
+  @spec init(any()) :: {:ok, machine_state()}
+  @impl true
+  def init(_args) do
+    {:ok, %{}}
+  end
+
+  # Do nothing.
+  def idle(state), do: state
 
   ## Handle events
+
+  # :event
+
+  # :update
 
   ## some inner functions.
 
@@ -65,10 +75,10 @@ defmodule Glowworm.SomaRunner do
     {next_state, next_runner_state} = apply(state[:model], :nextstep, state[:container])
     {param, _state, input, _runner_state} = state[:container]
 
-    %{state | container: {param, state, input, runner_state}}
+    %{state | container: {param, next_state, input, next_runner_state}}
   end
 
-  @spec do_update_current(machine_state(), any(), function(any(), any())) :: machine_state()
+  @spec do_update_current(machine_state(), any(), fun()) :: machine_state()
   def do_update_current(state, input, convert_func) do
     {param, state, _prev_input, runner_state} = state[:container]
 
@@ -77,7 +87,7 @@ defmodule Glowworm.SomaRunner do
     %{state | container: {param, state, new_input, runner_state}}
   end
 
-  @spec do_update_runner_state(machine_state(), R.t()) :: machine_state()
+  @spec do_update_runner_state(machine_state(), R.RunnerState.t()) :: machine_state()
   def do_update_runner_state(state, new_runner_state) do
     {param, state, input, _runner_state} = state[:container]
 
@@ -88,7 +98,7 @@ defmodule Glowworm.SomaRunner do
   # Invoked when counter in runner equals zero.
   @spec do_check_stable(machine_state()) :: machine_state()
   def do_check_stable(state) do
-    {param, state, input, runner_state} = state[:container]
+    {param, state, input, _runner_state} = state[:container]
 
     stable = apply(state[:model], :check_stable, [param, state, input])
 

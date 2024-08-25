@@ -5,7 +5,7 @@ defmodule Glowworm.Models.Izhikevich do
 
   @behaviour Glowworm.Models
 
-  alias Glowworm.Neuron.State, as: NeuronState
+  # alias Glowworm.Neuron.State, as: NeuronState
   alias Glowworm.SomaRunner.RunnerState
   alias Glowworm.Models.Izhikevich, as: M
 
