@@ -58,7 +58,7 @@ defmodule Glowworm.SomaRunner do
   @spec init(any()) :: {:ok, machine_state()}
   @impl true
   def init(args) do
-    conn = Keyword.validate!(args, event: :required, inspect: :optional)[:conn]
+    _conn = Keyword.validate!(args, event: :required, inspect: :optional)[:conn]
     model = Keyword.get(args, :model, Glowworm.Models.Izhikevich)
 
     {
@@ -67,7 +67,7 @@ defmodule Glowworm.SomaRunner do
         state: :idle,
         container: nil,
         model: model,
-        conn: %{event: nil, inspect: nil | conn}
+        conn: %{event: nil, inspect: nil}
       }
     }
   end
