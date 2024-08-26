@@ -41,6 +41,8 @@ defmodule Glowworm.SomaRunner do
           conn: %{event: pid() | nil, inspect: pid() | nil}
         }
 
+  ## Callbacks
+
   @impl GenStateM
   def callback_mode(), do: :state_functions
 
@@ -55,12 +57,20 @@ defmodule Glowworm.SomaRunner do
 
   @spec init(any()) :: {:ok, machine_state()}
   @impl true
-  def init(_args) do
-    {:ok, %{}}
-  end
+  def init(args) do
+    conn = Keyword.validate!(args, event: :required, inspect: :optional)[:conn]
+    model = Keyword.get(args, :model, Glowworm.Models.Izhikevich)
 
-  # Do nothing.
-  def idle(state), do: state
+    {
+      :ok,
+      %{
+        state: :idle,
+        container: nil,
+        model: model,
+        conn: %{event: nil, inspect: nil | conn}
+      }
+    }
+  end
 
   ## Handle events
 
