@@ -39,44 +39,8 @@
 
 项目架构如下图展示：
 
-```mermaid
-graph TD
-  Application["应用（Application）"] --> NeuronSupervisor["神经元监视器（NeuronSupervisor）"]
-  NeuronSupervisor --1..n--> Neuron["神经元（Neuron） :gen_statem"]
-  Application --> PortScheduler("端口管理器（PortScheduler）")
-  PortScheduler --1..m--> Port("端口（Port）")
-  Port <-.刺激或记录.-> Neuron
-  Neuron <-.神经元之间的通信.-> Neuron
-  Neuron --> SomaRunner("神经元状态的仿真（SomaRunner） Agent")
-  Neuron --> SynapseRunner("突触的仿真（SynapseRunner） Agent")
-  SynapseRunner -.输入电流.-> SomaRunner
-  Models["模型（通常用 NIF 实现）"] -.require.-> SomaRunner
-  Models["模型（通常用 NIF 实现）"] -.require.-> SynapseRunner
-```
+![img](/assets/Glowworm-arch-zh.png)
 
 ### 神经网络的架构
 
 TODO: until project finished.
-
-## Roadmap
-
-- [ ] 运行组件
-  - [x] Izhikevich 模型
-  - [ ] 突触建模
-    - [x] pulse -> 电导变化
-    - [ ] 电导变化 -> 电流变化
-  - [ ] 具有神经可塑性的突触
-    - [ ] STP
-    - LTP（暂时不考虑）
-  - [ ] LIF 模型
-- [ ] 神经元
-  - [ ] 考虑到 `Runner`
-  - [ ] 完整的 `NeuronState` （不依赖于运行部分）
-  - [ ] 将神经元变为进程并且通过通信来实现交流
-  - [ ] 进程监控
-    - 激活/休眠
-    - 故障时重启
-- [ ] 神经回路的建模
-  - ...
-- [ ] 感知的建模
-- ...

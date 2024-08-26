@@ -5,7 +5,7 @@ defmodule Glowworm.Models.LIF do
 
   @behaviour Glowworm.Models
 
-  alias Glowworm.Neuron.State, as: NeuronState
+  # alias Glowworm.Neuron.State, as: NeuronState
   alias Glowworm.SomaRunner.RunnerState
   alias Glowworm.Models.LIF, as: M
 
@@ -15,11 +15,9 @@ defmodule Glowworm.Models.LIF do
   def nextstep(_param, _state, _input, _runner), do: :erlang.nif_error(:nif_not_loaded)
 
   @impl true
-  def to_neuron(%M.NeuronState{} = neuron_status, %RunnerState{} = runner_status) do
-    %NeuronState{
-      counter: runner_status.counter,
-      membrane_potential: neuron_status.potential,
-      output_spike: runner_status.event
-    }
+  @spec check_stable(M.NeuronState.t(), M.NeuronState.t(), M.InputState.t()) :: boolean
+  def check_stable(%M.NeuronState{potential: p1}, %M.NeuronState{potential: p2}, %M.InputState{current: 0.0}) do
+    - 0.0001 < (p1 - p2) and (p1 - p2) < +0.0001
   end
+  def check_stable(_state, _state, _input), do: false
 end

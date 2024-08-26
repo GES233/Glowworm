@@ -5,7 +5,7 @@ defmodule Glowworm.Models.Izhikevich do
 
   @behaviour Glowworm.Models
 
-  alias Glowworm.Neuron.State, as: NeuronState
+  # alias Glowworm.Neuron.State, as: NeuronState
   alias Glowworm.SomaRunner.RunnerState
   alias Glowworm.Models.Izhikevich, as: M
 
@@ -15,11 +15,9 @@ defmodule Glowworm.Models.Izhikevich do
   def nextstep(_param, _state, _input, _runner), do: :erlang.nif_error(:nif_not_loaded)
 
   @impl true
-  def to_neuron(%M.NeuronState{} = neuron_status, %RunnerState{} = runner_status) do
-    %NeuronState{
-      counter: runner_status.counter,
-      membrane_potential: neuron_status.potential,
-      output_spike: runner_status.event
-    }
+  def check_stable(%M.NeuronState{u: u1, v: v1}, %M.NeuronState{u: u2, v: v2}, %M.InputState{current: 0.0}) do
+    false
+    # TODO: impl it.
   end
+  def check_stable(_state, _state, _input), do: nil
 end

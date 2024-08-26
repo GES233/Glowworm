@@ -8,18 +8,19 @@ defmodule Glowworm.Models.AlphaSynapse do
     otp_app: :glowworm,
     crate: :alphasynapse_model
 
+  alias Glowworm.Models.AlphaSynapse, as: S
   @behaviour Glowworm.Models
 
   def nextstep(_param, _state, _input, _runner_state), do: :erlang.nif_error(:nif_not_loaded)
 
-  def to_neuron(_state, _runner_state) do
-  end
+  # TODO: impliment it after finish SynapseRunner
+  def check_stable(%S.SynapticState{}, %S.SynapticState{}, _input), do: false
 end
 
 defmodule Glowworm.Models.AlphaSynapse.Param do
   @moduledoc """
   * `tau`
-  * `g_amp`  # H_0 also.
+  * `g_amp`  *also is* `H_0`
   """
   @type t :: %__MODULE__{
           tau: number(),

@@ -48,11 +48,9 @@ defmodule Glowworm.Models do
   """
   @callback nextstep(param, state, input, runner_state) :: {state, runner_state}
 
-  @doc """
-  Send NeuronState under specific model into
-  implement-agnostic format.
+  # invoked when runner_state.counter is zero
+  @callback check_stable(state, state, input) :: true | false
 
-  Every part of runner didn't get entire state.
-  """
-  @callback to_neuron(state, runner_state) :: Glowworm.Neuron.State.t()
+  # TODO: Add input_convertor/1.
+  # input_convertor(Glowworm.msg()) :: input()
 end

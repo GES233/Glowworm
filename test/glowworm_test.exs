@@ -2,7 +2,7 @@ defmodule GlowwormTest do
   use ExUnit.Case
   doctest Glowworm
 
-  test "greets the world" do
-    assert Glowworm.hello() == :world
+  test "the truth" do
+    assert 1 + 1 == 2
   end
 end

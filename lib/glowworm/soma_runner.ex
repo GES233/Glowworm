@@ -2,138 +2,135 @@ defmodule Glowworm.SomaRunner do
   @moduledoc """
   SomaRunner.
 
-  * Running a frame(256 times)
-    - zip the data to neuron.
-  * Send event to `Neuron` if `pulse`
-  * Adjust timestep
+  ### Events received
+
+  * `{:activate, ...}` --> Initialize param, state, input, runner state
+  * `{:freeze, ...}` --> Deactivate from outside
+  * `{:chunk, ...}` --> Update Input
+  * `{:update, ...}` --> Update RunnerState
+  * `{:halt, ...}` --> Deavtivate and halt the runner
+
+  ### Events will send
+
+  * `{:pulse, ...}` --> Send pulse
+  * `{:state, ...}` --> Show state and runner state(used when inspect enabled)
+  * `{:freeze, ...}` --> Halt the runner if stable and non input(send to itself)
+
+  ### State
+
+  * `:idle` --> do nothing until has stimulus or receive `:activate`.
+  * `:running` --> Running simulation, receive stimulus until `:freeze` or stable.
+
+  when in activation(not in `:idle`), the runner has
+  periodic event during counter of runner state is zero.
+  Usually adjust timestep or do anything else.
   """
-  alias Glowworm.SomaRunner.RunnerState, as: R
-  use Agent
 
-  @type neuron_id :: atom()
-  @type model_param :: map() | struct()
-  @type soma_state :: map() | struct()
-  @type current_state :: map() | struct() | number()
+  alias Glowworm.Models, as: M
+  alias Glowworm.SomaRunner, as: R
+  alias :gen_statem, as: GenStateM
+  # About gen_statem, see:
+  # https://meraj-gearhead.ca/state-machine-in-elixir-using-erlangs-genstatem-behaviour
 
-  # stable.
-  @type conf :: %{
-          param: model_param(),
+  @behaviour GenStateM
+
+  @type state :: :idle | :running
+  @type container :: {M.param(), M.state(), M.input(), R.RunnerState.t()}
+  @type machine_state :: %{
+          state: state(),
+          container: container(),
           model: atom() | module(),
-          # Send RunnerState to.
-          send: pid() | nil,
-          # Send soma's state to(usually used when inspect.)
-          inspect: pid() | nil
+          conn: %{event: pid() | nil, inspect: pid() | nil}
         }
-  # always update when running.
-  @type init_state :: %{current: current_state(), soma: soma_state(), runner: R.t()}
-  @type state ::
-          {atom(), model_param(), soma_state(), current_state(), R.t(),
-           %{send: pid() | nil, inspect: pid() | nil}}
 
-  def neuron_id_to_pid(neuron_id) do
-    String.to_atom("#{neuron_id}_soma")
-  end
+  ## Callbacks
 
-  def child_spec(arg) do
-    {neuron_id, conf, init} = arg
+  @impl GenStateM
+  def callback_mode(), do: :state_functions
+
+  def child_spec(opts) do
+    {neuron_id, args} = opts
 
     %{
       id: neuron_id,
-      start: {__MODULE__, :start_link, [neuron_id, conf, init]},
-      type: :worker
+      start: {__MODULE__, :start_link, [args]}
     }
   end
 
-  defp get_init_state(conf, init) do
-    {conf[:model], conf[:param], init[:soma], init[:current], init[:runner],
-     %{send: conf[:send], inspect: conf[:inspect]}}
+  @spec init(any()) :: {:ok, machine_state()}
+  @impl true
+  def init(args) do
+    _conn = Keyword.validate!(args, event: :required, inspect: :optional)[:conn]
+    model = Keyword.get(args, :model, Glowworm.Models.Izhikevich)
+
+    {
+      :ok,
+      %{
+        state: :idle,
+        container: nil,
+        model: model,
+        conn: %{event: nil, inspect: nil}
+      }
+    }
   end
 
-  @spec start_link(neuron_id() | number(), conf(), init_state()) :: {:ok, pid()}
-  def start_link(neuron_id, conf, init) do
-    soma_name = neuron_id_to_pid(neuron_id)
-    Agent.start_link(fn -> get_init_state(conf, init) end, name: soma_name)
+  ## Linster Loop
+
+  def linster(_runner_pid) do
+    # ...
   end
 
-  # Simulation.
+  ## Handle events
 
-  def activate(_neuron_id), do: nil
+  # :event
 
-  def deactivate(_neuron_id), do: nil
+  # :update
 
-  def run(pid) do
-    {_model, _param, _soma, _current, _runner, conn} = Agent.get(pid, &(&1))
+  ## some inner functions.
 
-    # Execute one step and update.
-    Agent.update(pid, &do_next_step/1)
-
-    case conn do
-      # ?inspector
-      %{inspect: nil} -> nil
-      %{inspect: _} -> do_inspect(Agent.get(pid, &(&1)))
-
-      # ?send
-      %{send: nil} -> nil
-      %{send: send} -> send(send, get_runner_state())
-    end
-
-    # ?current.
-    # TODO: Add no blocking method.
-
-    # ?halt.
-    if false do
-      stop(pid)
-    end
-
-    run(pid)
-  end
-
-  def stop(pid) do
-    Agent.stop(pid)
-  end
-
-  def get_current() do
-    receive do
-      {:current, _value} -> nil
-      # code
-      _ -> nil
-    end
-  end
-
-  @spec do_next_step(state()) :: {{soma_state(), R.t()}, state()}
+  @spec do_next_step(machine_state()) :: machine_state()
   def do_next_step(state) do
-    {model, param, soma, current, runner, conn} = state
+    {next_state, next_runner_state} = apply(state[:model], :nextstep, state[:container])
+    {param, _state, input, _runner_state} = state[:container]
 
-    # Wrap `Models.next_step/4`
-    {next_soma, next_runner} = apply(model, :nextstep, [param, soma, current, runner])
-
-    %{
-      res: {next_soma, next_runner},
-      state: {model, param, next_soma, current, next_runner, conn}
-    }
+    %{state | container: {param, next_state, input, next_runner_state}}
   end
 
-  def do_single_step(pid) do
-    Agent.get_and_update(pid, fn state ->
-      {do_next_step(state)[:res], do_next_step(state)[:state]}
-    end)
+  @spec do_update_current(machine_state(), any(), fun()) :: machine_state()
+  def do_update_current(state, input, convert_func) do
+    {param, state, _prev_input, runner_state} = state[:container]
+
+    new_input = convert_func.(input)
+
+    %{state | container: {param, state, new_input, runner_state}}
   end
 
-  ## Inspect
+  @spec do_update_runner_state(machine_state(), R.RunnerState.t()) :: machine_state()
+  def do_update_runner_state(state, new_runner_state) do
+    {param, state, input, _runner_state} = state[:container]
 
-  # todo: make private
-  def do_inspect(state) do
-    {_, _, _, soma, _, conn} = state
-
-    # TODO: finish communicate spec.
-    send(conn[:inspect], {:soma, soma})
+    %{state | container: {param, state, input, new_runner_state}}
   end
 
-  def get_runner_state() do
-    Agent.get(__MODULE__, fn {_, _, _, runner_state, _} -> runner_state end)
+  # TODO: Add check halt spontaneously.
+  # Invoked when counter in runner equals zero.
+  @spec do_check_stable(machine_state()) :: machine_state()
+  def do_check_stable(state) do
+    {param, state, input, _runner_state} = state[:container]
+
+    stable = apply(state[:model], :check_stable, [param, state, input])
+
+    # TODO: Add send event.
+
+    if(stable, do: %{state | state: :idle}, else: state)
   end
 
-  # send frame to Neuron.
+  # TODO: Ensure where is the neuron's id.
+  def do_send_pulse(state) do
+    {_param, _state, _input, runner_state} = state[:container]
+
+    {:event, {:pulse, runner_state}}
+  end
 end
 
 defmodule Glowworm.SomaRunner.RunnerState do
@@ -141,7 +138,6 @@ defmodule Glowworm.SomaRunner.RunnerState do
   Only used for soma runner.
   """
 
-  # TODO: Add timestep here.
   @type t :: %__MODULE__{
           event: atom(),
           counter: non_neg_integer(),
