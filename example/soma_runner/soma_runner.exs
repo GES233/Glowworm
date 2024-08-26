@@ -92,13 +92,19 @@ defmodule PulseReceiver do
           |> do_update_pulse()
 
           false
+
         # update frame
-        :update -> do_update_frame()
+        :update ->
+          do_update_frame()
 
           false
+
         # halt
-        :halt -> true
-        _ -> true
+        :halt ->
+          true
+
+        _ ->
+          true
       end
 
     case ht do
@@ -128,13 +134,24 @@ end
 
 ## TODO: implement inspector
 defmodule Inspector do
-  # use Agent
+  use Agent
 
-  @type state() :: %{pulse: pid(), container: [SR.container()], runner: [SR.RunnerState.t()]}
+  @type frame_idx :: pos_integer()
+  @type state() :: %{
+          # Send message when received :pulse from soma runner.
+          pulse: pid(),
+          container: %{frame_idx() => [{SR.container(), SR.RunnerState.t()}]}
+        }
+
+  def start_link(pulse_agent) do
+    Agent.start_link(fn -> %{pulse: pulse_agent, container: %{0 => []}} end, name: __MODULE__)
+  end
 end
 
 # Prelude.
-# {:ok, soma_runner} = SR.start_link()
+# {:ok, pulse_receiver} = PulseReceiver.start_link()
+# {:ok, inspector} = Inspector.start_link(pulse_receiver)
+# {:ok, soma_runner} = SR.start_link(...)
 # {:ok, injector} = CurrentInjector.start_link(soma_runner)
 
 # Begin simulation.
@@ -144,5 +161,5 @@ end
 # GenStateM.stop(soma_runner)
 # Send {:halt, nil} to PulseReceiver
 
-## Process result.
+## Process and show result.
 #  ...
