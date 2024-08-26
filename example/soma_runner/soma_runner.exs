@@ -1,5 +1,5 @@
 # alias Glowworm, as: G
-# alias Glowworm.SomaRunner, as: SR
+alias Glowworm.SomaRunner, as: SR
 # alias :gen_statem, as: GenStateM
 
 defmodule CurrentInjector do
@@ -75,30 +75,74 @@ defmodule CurrentInjector do
   def run_single_step(prev_current), do: prev_current - prev_current * @timestep
 end
 
-# test
-defmodule FakeReceiver do
-  def loop() do
-    receive do
-      {:inject_current, value} -> IO.puts("current: #{value}")
-    end
+defmodule PulseReceiver do
+  use Agent
 
-    loop()
+  def start_link() do
+    Agent.start_link(fn -> %{pulses: [], current_frame: 0} end, name: __MODULE__)
+  end
+
+  def run() do
+    ht =
+      receive do
+        # pulse
+        {:pulse, runner_state} ->
+          runner_state
+          |> parse_pulse()
+          |> do_update_pulse()
+
+          false
+        # update frame
+        :update -> do_update_frame()
+
+          false
+        # halt
+        :halt -> true
+        _ -> true
+      end
+
+    case ht do
+      true -> show_pulses()
+      _ -> run()
+    end
+  end
+
+  # from Inspector
+  def do_update_frame(),
+    do:
+      Agent.update(__MODULE__, fn state -> %{state | current_frame: state.current_frame + 1} end)
+
+  # from SomaRunner
+  def parse_pulse(runner_state), do: runner_state.counter
+
+  def do_update_pulse(current_counter) do
+    Agent.update(__MODULE__, fn state ->
+      %{state | pulses: [state.current_frame * 256 + current_counter | state.pulses]}
+    end)
+  end
+
+  def show_pulses() do
+    Agent.get(__MODULE__, Enum.reverse(& &1.pulses))
   end
 end
 
-# test_pid = spawn(FakeReceiver, :loop, [])
-# {:ok, injector} = CurrentInjector.start_link(test_pid)
-# CurrentInjector.run(injector)
-
-## TODO: implement pulse receiver
-
 ## TODO: implement inspector
+defmodule Inspector do
+  # use Agent
 
+  @type state() :: %{pulse: pid(), container: [SR.container()], runner: [SR.RunnerState.t()]}
+end
+
+# Prelude.
 # {:ok, soma_runner} = SR.start_link()
 # {:ok, injector} = CurrentInjector.start_link(soma_runner)
 
+# Begin simulation.
+# ...
+
 ## Fin.
 # GenStateM.stop(soma_runner)
+# Send {:halt, nil} to PulseReceiver
 
 ## Process result.
 #  ...

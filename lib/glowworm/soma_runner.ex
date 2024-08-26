@@ -72,6 +72,12 @@ defmodule Glowworm.SomaRunner do
     }
   end
 
+  ## Linster Loop
+
+  def linster(_runner_pid) do
+    # ...
+  end
+
   ## Handle events
 
   # :event

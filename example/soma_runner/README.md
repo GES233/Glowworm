@@ -25,3 +25,8 @@ Ratio: 113.20266723632812.
 ## SomaRunner as an Agent
 
 TODO: Add description, usecase and result.
+
+```
+~playground/glowworm> mix run example/soma_runner/soma_runner.exs
+...
+```
