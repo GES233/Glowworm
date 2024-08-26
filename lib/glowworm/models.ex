@@ -48,5 +48,9 @@ defmodule Glowworm.Models do
   """
   @callback nextstep(param, state, input, runner_state) :: {state, runner_state}
 
-  # TODO: Add check_stable.
+  # invoked when runner_state.counter is zero
+  @callback check_stable(state, state, input) :: true | false
+
+  # TODO: Add input_convertor/1.
+  # input_convertor({:event, data}) -> i
 end
