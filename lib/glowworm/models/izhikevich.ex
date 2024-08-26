@@ -15,7 +15,7 @@ defmodule Glowworm.Models.Izhikevich do
   def nextstep(_param, _state, _input, _runner), do: :erlang.nif_error(:nif_not_loaded)
 
   @impl true
-  def check_stable(%M.NeuronState{u: u1, v: v1}, %M.NeuronState{u: u2, v: v2}, %M.InputState{current: 0.0}) do
+  def check_stable(%M.NeuronState{recovery: _u1, potential: _v1}, %M.NeuronState{recovery: _u2, potential: _v2}, %M.InputState{current: 0.0}) do
     false
     # TODO: impl it.
   end
