@@ -52,5 +52,5 @@ defmodule Glowworm.Models do
   @callback check_stable(state, state, input) :: true | false
 
   # TODO: Add input_convertor/1.
-  # input_convertor({:event, data}) -> i
+  # input_convertor(Glowworm.msg()) :: input()
 end

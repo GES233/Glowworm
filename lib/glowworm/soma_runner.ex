@@ -6,13 +6,15 @@ defmodule Glowworm.SomaRunner do
 
   * `{:activate, ...}` --> Initialize param, state, input, runner state
   * `{:freeze, ...}` --> Deactivate from outside
-  * `{:event, ...}` --> Update Input
+  * `{:chunk, ...}` --> Update Input
   * `{:update, ...}` --> Update RunnerState
+  * `{:halt, ...}` --> Deavtivate and halt the runner
 
   ### Events will send
 
-  * `{:event, ...}` --> Send pulse
+  * `{:pulse, ...}` --> Send pulse
   * `{:state, ...}` --> Show state and runner state(used when inspect enabled)
+  * `{:freeze, ...}` --> Halt the runner if stable and non input(send to itself)
 
   ### State
 
