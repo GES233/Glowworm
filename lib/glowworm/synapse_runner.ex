@@ -7,9 +7,11 @@ defmodule Glowworm.SynapseRunner do
 
   @type state :: :idle | :running
   @type container :: {M.param(), M.state(), M.input(), S.RunnerState.t()}
+  @type container_res :: {M.state(), R.RunnerState.t()}
   @type machine_state :: %{
           state: state(),
           container: container(),
+          container_prev: container_res(),
           model: atom() | module(),
           conn: %{event: pid() | nil, inspect: pid() | nil}
         }
@@ -37,6 +39,21 @@ defmodule Glowworm.SynapseRunner do
 
     %{state | container: {param, state, input, new_runner_state}}
   end
+
+  @spec do_check_stable(machine_state()) :: machine_state()
+  def do_check_stable(state) do
+    {_param, state1, input, _runner_state} = state[:container]
+    {state2, _runner_state2} = state[:container_prev]
+
+    stable = apply(state[:model], :check_stable, [state1, state2, input])
+
+    # TODO: Add send event.
+    # send(self(), {:halt, :model_in_stable})
+
+    if(stable, do: %{state | state: :idle}, else: state)
+  end
+
+  # TODO: Add do_send_current/1.
 end
 
 defmodule Glowworm.SynapseRunner.RunnerState do

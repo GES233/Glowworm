@@ -36,9 +36,12 @@ defmodule Glowworm.SomaRunner do
 
   @type state :: :idle | :running
   @type container :: {M.param(), M.state(), M.input(), R.RunnerState.t()}
+  # Output from nextstep/4
+  @type container_res :: {M.state(), R.RunnerState.t()}
   @type machine_state :: %{
           state: state(),
           container: container(),
+          container_prev: container_res(),
           model: atom() | module(),
           conn: %{event: pid() | nil, inspect: pid() | nil}
         }
@@ -62,12 +65,14 @@ defmodule Glowworm.SomaRunner do
   def init(args) do
     _conn = Keyword.validate!(args, event: :required, inspect: :optional)[:conn]
     model = Keyword.get(args, :model, Glowworm.Models.Izhikevich)
+    # Add container.
 
     {
       :ok,
       %{
         state: :idle,
-        container: nil,
+        container: {nil, nil, nil, nil},
+        container_prev: {nil, nil},
         model: model,
         conn: %{event: nil, inspect: nil}
       }
@@ -112,20 +117,27 @@ defmodule Glowworm.SomaRunner do
     %{state | container: {param, state, input, new_runner_state}}
   end
 
-  # TODO: Add check halt spontaneously.
+  ## When counter == 0
+  #  => Check stable with prevoius state (`do_check_stable`)
+  #  => Update timestep from Neuron (`do_update_runner_state`)
+
+  # Check halt spontaneously.
   # Invoked when counter in runner equals zero.
   @spec do_check_stable(machine_state()) :: machine_state()
   def do_check_stable(state) do
-    {param, state, input, _runner_state} = state[:container]
+    {_param, state1, input, _runner_state} = state[:container]
+    {state2, _runner_state2} = state[:container_prev]
 
-    stable = apply(state[:model], :check_stable, [param, state, input])
+    stable = apply(state[:model], :check_stable, [state1, state2, input])
 
     # TODO: Add send event.
+    # send(self(), {:halt, :model_in_stable})
 
     if(stable, do: %{state | state: :idle}, else: state)
   end
 
   # TODO: Ensure where is the neuron's id.
+  # It requires the spec of neuron's name.
   def do_send_pulse(state) do
     {_param, _state, _input, runner_state} = state[:container]
 
