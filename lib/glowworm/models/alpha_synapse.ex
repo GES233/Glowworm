@@ -13,7 +13,7 @@ defmodule Glowworm.Models.AlphaSynapse do
 
   def nextstep(_param, _state, _input, _runner_state), do: :erlang.nif_error(:nif_not_loaded)
 
-  # TODO: impliment it after finish SynapseRunner
+  # TODO: implement it after finish SynapseRunner
   def check_stable(%S.SynapticState{}, %S.SynapticState{}, _input), do: false
 end
 

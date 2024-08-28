@@ -19,5 +19,5 @@ defmodule Glowworm.Models.Izhikevich do
     false
     # TODO: impl it.
   end
-  def check_stable(_state, _state, _input), do: nil
+  def check_stable(_state1, _state2, _input), do: nil
 end
