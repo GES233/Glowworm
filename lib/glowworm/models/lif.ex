@@ -16,8 +16,11 @@ defmodule Glowworm.Models.LIF do
 
   @impl true
   @spec check_stable(M.NeuronState.t(), M.NeuronState.t(), M.InputState.t()) :: boolean
-  def check_stable(%M.NeuronState{potential: p1}, %M.NeuronState{potential: p2}, %M.InputState{current: 0.0}) do
-    - 0.0001 < (p1 - p2) and (p1 - p2) < +0.0001
+  def check_stable(%M.NeuronState{potential: p1}, %M.NeuronState{potential: p2}, %M.InputState{
+        current: 0.0
+      }) do
+    -0.0001 < p1 - p2 and p1 - p2 < +0.0001
   end
+
   def check_stable(_state1, _state2, _input), do: false
 end

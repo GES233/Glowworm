@@ -23,6 +23,9 @@ defmodule Glowworm.Neuron do
   # handle_cast
 
   # handle_info
+
+  ## Some tool functions
+  # neuron_id related.
 end
 
 defmodule Glowworm.Neuron.Config do

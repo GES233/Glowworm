@@ -8,7 +8,7 @@ defmodule Glowworm.SomaRunner do
   * `{:freeze, ...}` --> Deactivate from outside
   * `{:chunk, ...}` --> Update Input
   * `{:update, ...}` --> Update RunnerState
-  * `{:halt, ...}` --> Deavtivate and halt the runner
+  * `{:halt, ...}` --> Deactivate and halt the runner
 
   ### Events will send
 
@@ -43,7 +43,19 @@ defmodule Glowworm.SomaRunner do
           container: container(),
           container_prev: container_res(),
           model: atom() | module(),
-          conn: %{event: pid() | nil, inspect: pid() | nil}
+          conn: %{event: pid() | nil, inspect: pid() | nil},
+          # Add Agents to receive message?
+          agents: %{
+            # {:chunk, ...}
+            # I
+            input_storage: pid(),
+            # infinite loop and activations
+            # P, S
+            runner_loop_agent: pid(),
+            # {:update, ...} and result of loop
+            # R
+            runner_state_storage: pid()
+          }
         }
 
   ## Callbacks
@@ -67,23 +79,52 @@ defmodule Glowworm.SomaRunner do
     model = Keyword.get(args, :model, Glowworm.Models.Izhikevich)
     # Add container.
 
+    neuron_id = :blabla
+    init_container = {nil, nil, nil, nil}
+
     {
       :ok,
       %{
         state: :idle,
-        container: {nil, nil, nil, nil},
+        container: init_container,
         container_prev: {nil, nil},
         model: model,
-        conn: %{event: nil, inspect: nil}
+        conn: %{event: nil, inspect: nil},
+        agents: spawn_agents(neuron_id, init_container)
       }
     }
   end
 
+  def spawn_agents(_neuron_id, _init_container) do
+    # TODO: Add agents to receive message.
+  end
+
   ## Linster Loop
 
-  def linster(_runner_pid) do
-    # ...
+  def linster(_runner_id) do
+    receive do
+      ## From Neuron
+      {:activate, _init_state} ->
+        nil
+
+      {:freeze} ->
+        nil
+
+      {:halt} ->
+        nil
+
+      {:update, _new_runner_state} ->
+        nil
+
+      ## From SynapseRunner
+      {:chunk, _new_input} ->
+        nil
+    end
+
+    linster(_runner_pid)
   end
+
+  ## State functions
 
   ## Handle events
 

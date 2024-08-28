@@ -33,7 +33,8 @@ defmodule Glowworm do
   @type update :: {:update, msg_payload()}
 
   # activate and freeze
-  @type activation :: {:activate, msg_payload()} | {:freeze, msg_payload()} | {:halt, msg_payload()}
+  @type activation ::
+          {:activate, msg_payload()} | {:freeze, msg_payload()} | {:halt, msg_payload()}
 
   @type msg() :: event() | state() | pulse() | chunk() | update() | activation()
 end
