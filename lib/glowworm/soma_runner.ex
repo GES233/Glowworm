@@ -198,3 +198,13 @@ defmodule Glowworm.SomaRunner.RunnerState do
         }
   defstruct [:counter, :timestep, event: nil]
 end
+
+defmodule Glowworm.SomaRunner.InputAgent do
+  use Agent
+end
+defmodule Glowworm.SomaRunner.StateAgent do
+  use Agent
+end
+defmodule Glowworm.SomaRunner.VariableParamAgent do
+  use Agent
+end
