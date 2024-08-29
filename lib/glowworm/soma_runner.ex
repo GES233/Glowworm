@@ -121,7 +121,7 @@ defmodule Glowworm.SomaRunner do
         nil
     end
 
-    linster(_runner_pid)
+    # linster()
   end
 
   ## State functions

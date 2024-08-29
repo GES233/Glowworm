@@ -8,8 +8,10 @@ defmodule Glowworm.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: Glowworm.Worker.start_link(arg)
-      # {Glowworm.Worker, arg}
+      # NetRegistry
+      # NeuronScheduler
+      # PortScheduler
+      # Inspector
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
