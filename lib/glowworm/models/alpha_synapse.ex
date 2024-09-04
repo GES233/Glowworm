@@ -8,7 +8,7 @@ defmodule Glowworm.Models.AlphaSynapse do
     otp_app: :glowworm,
     crate: :alphasynapse_model
 
-  alias Glowworm.Models.AlphaSynapse, as: S
+  # alias Glowworm.Models.AlphaSynapse, as: S
   @behaviour Glowworm.Models
 
   def nextstep(_param, _state, _input, _runner_state), do: :erlang.nif_error(:nif_not_loaded)
