@@ -33,6 +33,12 @@ mod input_atom {
 }
 
 #[derive(NifTuple)]
+struct InputState {
+  pub pulse: Atom,
+  pub potential: f64,
+}
+
+#[derive(NifTuple)]
 struct NifResult {
     pub synapse: SynapticState,
     pub runner: RunnerState,
@@ -46,12 +52,12 @@ fn dh(h: f64, tau: f64) -> f64 {
     -h / tau
 }
 
-fn has_spike(input: Atom) -> bool {
+fn has_spike(input: InputState) -> bool {
     // case input do
     //   nil -> false
     //   _ -> true
     // end
-    if input == input_atom::nil() { false }
+    if input.pulse == input_atom::nil() { false }
     else { true }
 }
 
@@ -69,8 +75,9 @@ fn runner_state_oprate(prev: RunnerState, current: f64) -> RunnerState {
     }
 }
 
+// TODO: Replace input as `InputState`.
 #[rustler::nif]
-fn nextstep(param: Param, state: SynapticState, input: Atom, runner: RunnerState) -> NifResult {
+fn nextstep(param: Param, state: SynapticState, input: InputState, runner: RunnerState) -> NifResult {
     // 1. Parse param and input.
     let h_0: f64 = param.g_amp;
     let tau: f64 = param.tau;

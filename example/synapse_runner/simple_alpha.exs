@@ -30,7 +30,7 @@ defmodule SimpleSynapse do
   def calc([head | _] = s, ct) do
     # Make graphing easier.
     {syn, runner, _} = head
-    pulse = get_pulse(ct)
+    pulse = {get_pulse(ct), +0.0}
 
     {next_syn, next_runner} =
       S.nextstep(
