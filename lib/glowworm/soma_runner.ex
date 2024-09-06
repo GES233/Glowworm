@@ -35,11 +35,10 @@ defmodule Glowworm.SomaRunner do
   @behaviour GenStateM
 
   @type state :: :idle | :running
-  @type container :: {M.param(), M.state(), M.input(), R.RunnerState.t()}
+  @type container :: {M.param() | nil, M.state() | nil, M.input() | nil, R.RunnerState.t() | nil}
   # Output from nextstep/4
   @type container_res :: {M.state(), R.RunnerState.t()}
   @type machine_state :: %{
-          state: state(),
           container: container(),
           container_prev: container_res(),
           model: atom() | module(),
@@ -72,7 +71,6 @@ defmodule Glowworm.SomaRunner do
     }
   end
 
-  @spec init(any()) :: {:ok, machine_state()}
   @impl true
   def init(args) do
     _conn = Keyword.validate!(args, event: :required, inspect: :optional)[:conn]
@@ -84,8 +82,8 @@ defmodule Glowworm.SomaRunner do
 
     {
       :ok,
+      :idle,
       %{
-        state: :idle,
         container: init_container,
         container_prev: {nil, nil},
         model: model,
@@ -97,6 +95,12 @@ defmodule Glowworm.SomaRunner do
 
   def spawn_agents(_neuron_id, _init_container) do
     # TODO: Add agents to receive message.
+
+    %{
+      input_storage: spawn(fn -> nil end),
+      runner_loop_agent: spawn(fn -> nil end),
+      runner_state_storage: spawn(fn -> nil end)
+    }
   end
 
   ## Linster Loop
@@ -202,9 +206,11 @@ end
 defmodule Glowworm.SomaRunner.InputAgent do
   use Agent
 end
+
 defmodule Glowworm.SomaRunner.StateAgent do
   use Agent
 end
+
 defmodule Glowworm.SomaRunner.VariableParamAgent do
   use Agent
 end

@@ -50,13 +50,13 @@ defmodule Glowworm.Neuron.State do
   @typedoc """
   Spike from soma(this or remote).
   """
-  alias Glowworm.Neuron
+  alias Glowworm.NeuronID
 
   @type output_spike :: boolean()
   @type t :: %__MODULE__{
           counter: non_neg_integer(),
-          input_spike: %{optional(Neuron.neuron_id()) => output_spike()} | [output_spike()] | nil,
-          synaptic_current: %{optional(Neuron.neuron_id()) => number()} | [number()] | nil,
+          input_spike: %{optional(NeuronID.t()) => output_spike()} | [output_spike()] | nil,
+          synaptic_current: %{optional(NeuronID.t()) => number()} | [number()] | nil,
           membrane_potential: number() | nil,
           output_spike: output_spike() | nil
         }
@@ -94,15 +94,4 @@ defmodule Glowworm.Neuron.State do
   def mix(_spike, _soma) do
     # ...
   end
-end
-
-defmodule Glowworm.Neuron.Conn do
-  # Record connection.
-  alias Glowworm.Neuron
-
-  @type t :: %__MODULE__{
-          from: list(Neuron.id()),
-          to: list(Neuron.id())
-        }
-  defstruct [:from, :to]
 end

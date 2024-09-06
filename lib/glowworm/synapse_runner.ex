@@ -1,13 +1,13 @@
 defmodule Glowworm.SynapseRunner do
   # alias :gen_statem, as: GenStateM
-  alias GLowworm.Models, as: M
+  alias Glowworm.Models, as: M
   alias Glowworm.SynapseRunner, as: S
 
   # @behaviour GenStateM
 
   @type state :: :idle | :running
   @type container :: {M.param(), M.state(), M.input(), S.RunnerState.t()}
-  @type container_res :: {M.state(), R.RunnerState.t()}
+  @type container_res :: {M.state(), S.RunnerState.t()}
   @type machine_state :: %{
           state: state(),
           container: container(),
