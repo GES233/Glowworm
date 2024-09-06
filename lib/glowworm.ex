@@ -26,9 +26,9 @@ defmodule Glowworm do
   @type pulse :: {:pulse, msg_payload()}
 
   @typedoc """
-  `chunk` like a straming message, ONLY used for SynapseRunner -> SomaRunner.
+  `frame` like a straming message, ONLY used for SynapseRunner -> SomaRunner.
   """
-  @type chunk :: {:chuck, msg_payload()}
+  @type frame :: {:chuck, msg_payload()}
 
   @type update :: {:update, msg_payload()}
 
@@ -36,7 +36,7 @@ defmodule Glowworm do
   @type activation ::
           {:activate, msg_payload()} | {:freeze, msg_payload()} | {:halt, msg_payload()}
 
-  @type msg() :: event() | state() | pulse() | chunk() | update() | activation()
+  @type msg() :: event() | state() | pulse() | frame() | update() | activation()
 end
 
 # Need protocals?

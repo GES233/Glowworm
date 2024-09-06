@@ -3,9 +3,9 @@ defmodule Demo do
   alias Glowworm.Models.Izhikevich, as: I
 
   @timestep 0.01
-  @frame_count 512
+  @chunk_count 512
   @current_map %{
-    # Current at frame level.
+    # Current at chunk level.
     p1: {250, 3.0},
     p2: {30, 0.0},
     fin: {256, nil}
@@ -23,18 +23,18 @@ defmodule Demo do
 
   def get_timestep(), do: @timestep
 
-  def get_frame() do
+  def get_chunk() do
     {fin, _} = @current_map.fin
 
     fin
   end
 
-  def get_total(), do: get_frame() * @frame_count
+  def get_total(), do: get_chunk() * @chunk_count
 
   def get_current(tick) do
     # TODO:
-    # total = @current_map |> get_frame |> sort[-1]
-    # rest = @current_map |> get_frame |> sort
+    # total = @current_map |> get_chunk |> sort[-1]
+    # rest = @current_map |> get_chunk |> sort
     cond do
       tick == 256 * (250 + 256) ->
         IO.puts(
@@ -93,7 +93,7 @@ defmodule Demo do
       case new_runner.counter do
         0 ->
           cond do
-            # In `Glwworm.Neuron`, compare between two frames
+            # In `Glwworm.Neuron`, compare between two chunks
             # with counter = 0 in previous step.
             -1.0e-5 <= du and du <= 1.0e-5 and -1.0e-5 <= dv and dv <= 1.0e-5 and current == 0.0 ->
               inspect_halt(du, dv, ct)

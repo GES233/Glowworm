@@ -3,13 +3,13 @@ defmodule SimpleSynapse do
   alias Glowworm.Models.AlphaSynapse, as: S
 
   @timestep 0.01
-  @frame_count 512
-  @total_frame 20
+  @chunk_count 512
+  @total_chunk 20
   @g_amp 5.0
   @spike_map [0, 5000, 5200, 5350]
 
   def get_timestep(), do: @timestep
-  def get_total(), do: @total_frame * @frame_count
+  def get_total(), do: @total_chunk * @chunk_count
 
   def get_pulse(ct) do
     if (get_total() - ct) in @spike_map do

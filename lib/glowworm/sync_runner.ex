@@ -32,7 +32,7 @@ defmodule Glowworm.Neuron.SyncRunner do
     %{}
   end
 
-  def execute_frame() do
+  def execute_chunk() do
     # ...
 
     _ = prelude()

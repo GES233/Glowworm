@@ -6,7 +6,7 @@
 
 ## 想法
 
-记录着想法来源的内容 [Interactive testbed for cortical modeling? - Elixir Framework Forums / Nx Forum - Elixir Programming Language Forum](https://elixirforum.com/t/interactive-testbed-for-cortical-modeling/61178/3) 。
+记录着想法来源的内容 [Interactive testbed for cortical modeling? - Elixir chunkwork Forums / Nx Forum - Elixir Programming Language Forum](https://elixirforum.com/t/interactive-testbed-for-cortical-modeling/61178/3) 。
 
 > 内容如下：
 >

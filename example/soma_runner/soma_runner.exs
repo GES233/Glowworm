@@ -79,7 +79,7 @@ defmodule PulseReceiver do
   use Agent
 
   def start_link() do
-    Agent.start_link(fn -> %{pulses: [], current_frame: 0} end, name: __MODULE__)
+    Agent.start_link(fn -> %{pulses: [], current_chunk: 0} end, name: __MODULE__)
   end
 
   def run() do
@@ -93,9 +93,9 @@ defmodule PulseReceiver do
 
           false
 
-        # update frame
+        # update chunk
         :update ->
-          do_update_frame()
+          do_update_chunk()
 
           false
 
@@ -114,16 +114,16 @@ defmodule PulseReceiver do
   end
 
   # from Inspector
-  def do_update_frame(),
+  def do_update_chunk(),
     do:
-      Agent.update(__MODULE__, fn state -> %{state | current_frame: state.current_frame + 1} end)
+      Agent.update(__MODULE__, fn state -> %{state | current_chunk: state.current_chunk + 1} end)
 
   # from SomaRunner
   def parse_pulse(runner_state), do: runner_state.counter
 
   def do_update_pulse(current_counter) do
     Agent.update(__MODULE__, fn state ->
-      %{state | pulses: [state.current_frame * 256 + current_counter | state.pulses]}
+      %{state | pulses: [state.current_chunk * 256 + current_counter | state.pulses]}
     end)
   end
 
@@ -136,11 +136,11 @@ end
 defmodule Inspector do
   use Agent
 
-  @type frame_idx :: pos_integer()
+  @type chunk_idx :: pos_integer()
   @type state() :: %{
           # Send message when received :pulse from soma runner.
           pulse: pid(),
-          container: %{frame_idx() => [{SR.container(), SR.RunnerState.t()}]}
+          container: %{chunk_idx() => [{SR.container(), SR.RunnerState.t()}]}
         }
 
   def start_link(pulse_agent) do

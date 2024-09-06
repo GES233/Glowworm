@@ -6,7 +6,7 @@ defmodule Glowworm.SomaRunner do
 
   * `{:activate, ...}` --> Initialize param, state, input, runner state
   * `{:freeze, ...}` --> Deactivate from outside
-  * `{:chunk, ...}` --> Update Input
+  * `{:frame, ...}` --> Update Input
   * `{:update, ...}` --> Update RunnerState
   * `{:halt, ...}` --> Deactivate and halt the runner
 
@@ -46,7 +46,7 @@ defmodule Glowworm.SomaRunner do
           conn: %{event: pid() | nil, inspect: pid() | nil},
           # Add Agents to receive message?
           agents: %{
-            # {:chunk, ...}
+            # {:frame, ...}
             # I
             input_storage: pid(),
             # infinite loop and activations
@@ -117,7 +117,7 @@ defmodule Glowworm.SomaRunner do
         nil
 
       ## From SynapseRunner
-      {:chunk, _new_input} ->
+      {:frame, _new_input} ->
         nil
     end
 
