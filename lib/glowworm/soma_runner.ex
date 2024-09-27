@@ -1,6 +1,8 @@
 defmodule Glowworm.SomaRunner do
   @moduledoc """
-  SomaRunner.
+  `SomaRunner` is a process under `Neuron` in Glowworm.
+  It used for containing some params and variables and
+  execute a infinite loop to implement simulation.
 
   ### Events received
 
