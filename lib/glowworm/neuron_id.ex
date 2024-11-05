@@ -14,10 +14,7 @@ defmodule Glowworm.NeuronID do
   end
 
   def sqeeze(%__MODULE__{} = neuron_id),
-    do:
-      [neuron_id.scope, neuron_id.layer, neuron_id.index]
-      |> Enum.join("_")
-      |> String.to_atom()
+    do: :"#{neuron_id.scope}_#{neuron_id.layer}_#{neuron_id.index}"
 
   def sqeeze(_), do: nil
 

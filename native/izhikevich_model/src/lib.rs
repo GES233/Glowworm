@@ -164,4 +164,7 @@ fn nextstep(param: Param, state: NeuronState, input: InputState, runner: RunnerS
     }
 }
 
+// #[rustler::nif]
+// fn check_stable(state1: NeuronState, state2: NeuronState, input: InputState) {}
+
 rustler::init!("Elixir.Glowworm.Models.Izhikevich", [nextstep]);
