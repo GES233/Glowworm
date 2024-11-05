@@ -24,8 +24,8 @@ graph TD
   PortScheduler --1..m--> Port("Port")
   Port <-.simulus or record.-> Neuron
   Neuron <-.communication.-> Neuron
-  Neuron --> SomaRunner("SomaRunner :gen_statem")
-  Neuron --> SynapseRunner("SynapseRunner :gen_statem")
+  Neuron --> SomaRunner("SomaRunner :gen_statem") --> Container("Param and State Container: Agent")
+  Neuron --> SynapseRunner("SynapseRunner :gen_statem") --> Container("Param and State Container: Agent")
   SynapseRunner -.current.-> SomaRunner
   Models -.require.-> SomaRunner
   Models -.require.-> SynapseRunner
