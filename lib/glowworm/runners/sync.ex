@@ -1,12 +1,12 @@
-defmodule Glowworm.Neuron.SyncRunner do
+defmodule Glowworm.Runners.Sync do
   @moduledoc """
   Intergrate all runners and running it
   in a synchrone method.
   """
   use Agent
 
-  # alias Glowworm.SomaRunner.RunnerState, as: SomaState
-  # alias Glowworm.SynapseRunner.RunnerState, as: SynState
+  # alias Glowworm.Runners.Soma.RunnerState, as: SomaState
+  # alias Glowworm.Runners.Synapse.RunnerState, as: SynState
 
   def start_link(neuron_id, args) do
     Agent.start_link(__MODULE__, :run, [args], name: neuron_id)

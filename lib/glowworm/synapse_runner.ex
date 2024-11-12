@@ -1,13 +1,14 @@
 defmodule Glowworm.SynapseRunner do
   # alias :gen_statem, as: GenStateM
   alias Glowworm.Models, as: M
-  alias Glowworm.SynapseRunner, as: S
+  # alias Glowworm.SynapseRunner, as: S
+  alias Glowworm.Runners.Synapse.RunnerState
 
   # @behaviour GenStateM
 
   @type state :: :idle | :running
-  @type container :: {M.param(), M.state(), M.input(), S.RunnerState.t()}
-  @type container_res :: {M.state(), S.RunnerState.t()}
+  @type container :: {M.param(), M.state(), M.input(), RunnerState.t()}
+  @type container_res :: {M.state(), RunnerState.t()}
   @type machine_state :: %{
           state: state(),
           container: container(),
@@ -33,7 +34,7 @@ defmodule Glowworm.SynapseRunner do
     %{state | container: {param, state, convert_func.(input), runner_state}}
   end
 
-  @spec do_update_runner_state(machine_state(), S.RunnerState.t()) :: machine_state()
+  @spec do_update_runner_state(machine_state(), RunnerState.t()) :: machine_state()
   def do_update_runner_state(state, new_runner_state) do
     {param, state, input, _runner_state} = state[:container]
 

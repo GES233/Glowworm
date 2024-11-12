@@ -136,11 +136,13 @@ end
 defmodule Inspector do
   use Agent
 
+  alias Glowworm.Runners.Soma
+
   @type chunk_idx :: pos_integer()
   @type state() :: %{
           # Send message when received :pulse from soma runner.
           pulse: pid(),
-          container: %{chunk_idx() => [{SR.container(), SR.RunnerState.t()}]}
+          container: %{chunk_idx() => [{SR.container(), Soma.RunnerState.t()}]}
         }
 
   def start_link(pulse_agent) do

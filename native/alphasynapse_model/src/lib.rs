@@ -18,7 +18,7 @@ struct SynapticState {
 }
 
 #[derive(Debug, NifStruct)]
-#[module = "Glowworm.SynapseRunner.RunnerState"]
+#[module = "Glowworm.Runners.Synapse.RunnerState"]
 struct RunnerState {
     pub current: f64,
     pub counter: u8,

@@ -1,6 +1,8 @@
+alias Glowworm.Runners.Soma.RunnerState, as: Runner
+alias Glowworm.Models.Izhikevich, as: I
+
 defmodule Demo do
-  alias Glowworm.SomaRunner.RunnerState, as: Runner
-  alias Glowworm.Models.Izhikevich, as: I
+  @moduledoc false
 
   @timestep 0.01
   @chunk_count 512
@@ -127,8 +129,8 @@ end
   :timer.tc(&Demo.calc/2, [
     [
       {
-        %Glowworm.Models.Izhikevich.NeuronState{potential: -65.0, recovery: 0.0},
-        %Glowworm.SomaRunner.RunnerState{counter: 0}
+        %I.NeuronState{potential: -65.0, recovery: 0.0},
+        %Runner{counter: 0}
       }
     ],
     Demo.get_total()

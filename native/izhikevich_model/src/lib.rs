@@ -32,7 +32,7 @@ mod event_atom {
 }
 
 #[derive(Debug, NifStruct)]
-#[module = "Glowworm.SomaRunner.RunnerState"]
+#[module = "Glowworm.Runners.Soma.RunnerState"]
 struct RunnerState {
   pub event: Atom,
   pub counter: u8,
@@ -93,7 +93,7 @@ fn runner_state_oprate(runner: RunnerState, peak: bool) -> RunnerState {
  * * NeuronState(`Elixir.Glowworm.Models.Izhikevich.NeuronState`)
  * * Param(`Elixir.Glowworm.Models.Izhikevich.Param`)
  * * Input(`Elixir.Glowworm.Models.Izhikevich.InputState`)
- * * RunnerState(`Elixir.Glowworm.SomaRunner.RunnerState`)
+ * * RunnerState(`Elixir.Glowworm.Runners.Soma.RunnerState`)
  *
  * return: `{NeuronState, RunnerState}`
  *

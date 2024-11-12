@@ -29,7 +29,8 @@ defmodule Glowworm.SomaRunner do
   """
 
   alias Glowworm.Models, as: M
-  alias Glowworm.SomaRunner, as: R
+  # alias Glowworm.SomaRunner, as: R
+  alias Glowworm.Runners.Soma.RunnerState
   alias :gen_statem, as: GenStateM
   # About gen_statem, see:
   # https://meraj-gearhead.ca/state-machine-in-elixir-using-erlangs-genstatem-behaviour
@@ -37,9 +38,9 @@ defmodule Glowworm.SomaRunner do
   @behaviour GenStateM
 
   @type state :: :idle | :running
-  @type container :: {M.param() | nil, M.state() | nil, M.input() | nil, R.RunnerState.t() | nil}
+  @type container :: {M.param() | nil, M.state() | nil, M.input() | nil, RunnerState.t() | nil}
   # Output from nextstep/4
-  @type container_res :: {M.state(), R.RunnerState.t()}
+  @type container_res :: {M.state(), RunnerState.t()}
   @type machine_state :: %{
           container: container(),
           container_prev: container_res(),
@@ -157,7 +158,7 @@ defmodule Glowworm.SomaRunner do
     %{state | container: {param, state, new_input, runner_state}}
   end
 
-  @spec do_update_runner_state(machine_state(), R.RunnerState.t()) :: machine_state()
+  @spec do_update_runner_state(machine_state(), RunnerState.t()) :: machine_state()
   def do_update_runner_state(state, new_runner_state) do
     {param, state, input, _runner_state} = state[:container]
 
@@ -192,21 +193,8 @@ defmodule Glowworm.SomaRunner do
   end
 end
 
-defmodule Glowworm.SomaRunner.RunnerState do
-  @moduledoc """
-  Only used for soma runner.
-  """
-
-  @type t :: %__MODULE__{
-          event: atom(),
-          counter: non_neg_integer(),
-          timestep: number()
-        }
-  defstruct [:counter, :timestep, event: nil]
-end
-
 defmodule Glowworm.SomaRunner.InputAgent do
-  use Agent
+  use Glowworm.Runners, :agent
 end
 
 defmodule Glowworm.SomaRunner.StateAgent do

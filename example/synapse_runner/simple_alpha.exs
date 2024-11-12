@@ -1,5 +1,4 @@
 defmodule SimpleSynapse do
-  # alias Glowworm.SynapseRunner.RunnerState, as: Runner
   alias Glowworm.Models.AlphaSynapse, as: S
 
   @timestep 0.01

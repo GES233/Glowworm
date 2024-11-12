@@ -3,8 +3,7 @@ defmodule Glowworm.Models do
   Glowworm.Models implement the model in runner.
   This module records some common components.
   """
-  alias Glowworm.SomaRunner, as: Soma
-  alias Glowworm.SynapseRunner, as: Synapse
+  alias Glowworm.Runners.{Soma, Synapse}
 
   @typedoc """
   State of model.

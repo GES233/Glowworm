@@ -1,7 +1,7 @@
 defmodule ModelTest.IzhikevichTest do
   use ExUnit.Case
 
-  alias Glowworm.Models.Izhikevich
+  alias Glowworm.Models.Izhikevich, as: I
 
   defmodule ElixirIzhikevich do
     @moduledoc """
@@ -16,10 +16,10 @@ defmodule ModelTest.IzhikevichTest do
     def update(v, u, _c, _d, _peak), do: {v, u}
 
     def nextstep(
-          %Izhikevich.Param{a: a, b: b, c: c, d: d, peak_threshold: peak},
-          %Izhikevich.NeuronState{potential: v, recovery: u},
-          %Izhikevich.InputState{current: inject_current},
-          runner = %Glowworm.SomaRunner.RunnerState{}
+          %I.Param{a: a, b: b, c: c, d: d, peak_threshold: peak},
+          %I.NeuronState{potential: v, recovery: u},
+          %I.InputState{current: inject_current},
+          runner = %Glowworm.Runners.Soma.RunnerState{}
         ) do
       dv = dv(v, u, inject_current)
       du = du(v, u, a, b)
@@ -35,7 +35,7 @@ defmodule ModelTest.IzhikevichTest do
 
       {v, u} = update(next_u, next_u, c, d, peak)
 
-      {%Izhikevich.NeuronState{potential: v, recovery: u},
+      {%I.NeuronState{potential: v, recovery: u},
        %{runner | counter: runner.counter + 1, event: event}}
     end
 
