@@ -60,7 +60,7 @@ end
     [
       {
         %Glowworm.Models.AlphaSynapse.SynapticState{g: 0.0, h: 0.0},
-        %Glowworm.SynapseRunner.RunnerState{current: 0.0, counter: 0, timestep: 0.01},
+        %Glowworm.Runners.Synapse.RunnerState{current: 0.0, counter: 0, timestep: 0.01},
         nil
       }
     ],

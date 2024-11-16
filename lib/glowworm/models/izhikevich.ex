@@ -24,14 +24,5 @@ defmodule Glowworm.Models.Izhikevich do
     # TODO: impl it.
   end
 
-  def check_stable(
-        %M.NeuronState{recovery: _u1, potential: _v1},
-        %M.NeuronState{recovery: _u2, potential: _v2},
-        %M.InputState{current: -0.0}
-      ) do
-    false
-    # TODO: impl it.
-  end
-
   def check_stable(_state1, _state2, _input), do: nil
 end
