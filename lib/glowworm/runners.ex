@@ -6,15 +6,22 @@ defmodule Glowworm.Runners do
   # As data container.
   def agent do
     quote do
+      import Glowworm.Runners, except: [runner: 0]
+
       use Agent
+
+      # @callback name(neuron_id :: any()) :: atom()
     end
   end
 
   def runner do
     quote do
-      alias :gen_statem, as: GenStateM
+      # Glowworm.Runners.agent/0 only used when as Agent.
+      import Glowworm.Runners, except: [agent: 0]
 
-      # ...
+      alias Glowworm.NeuronID, as: ID
+      alias :gen_statem, as: GenStateM
+      @behaviour GenStateM
     end
   end
 
