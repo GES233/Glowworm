@@ -6,15 +6,19 @@ defmodule Glowworm.NeuronID do
           layer: atom() | integer(),
           index: non_neg_integer()
         }
-  @type sqeezed :: atom()
+  @type sqeezed_id :: atom()
   defstruct [:scope, :layer, :index]
 
-  def new(scope, layer, index) do
+  # it's index not offset, so start with zero.
+  def new(scope \\ :glowworm, layer \\ 1, index \\ 1) do
     %__MODULE__{scope: scope, layer: layer, index: index}
   end
 
-  def sqeeze(%__MODULE__{} = neuron_id),
-    do: :"#{neuron_id.scope}_#{neuron_id.layer}_#{neuron_id.index}"
+  def sqeeze(%__MODULE__{} = neuron_id), do:
+    :"#{neuron_id.scope}_#{neuron_id.layer}_#{neuron_id.index}"
+
+  def sqeeze({scope, layer, id}), do:
+    :"#{scope}_#{layer}_#{id}"
 
   def sqeeze(_), do: nil
 
@@ -45,4 +49,7 @@ defmodule Glowworm.NeuronID do
         }
     end
   end
+
+  # [TODO)
+  # Multiple generate name within specific condition.
 end

@@ -30,6 +30,9 @@ defmodule Glowworm.Models do
           Soma.RunnerState.t()
           | Synapse.RunnerState.t()
 
+  @type nextstep_input :: {param(), state(), input(), runner_state()} | nil
+  @type nextstep_output :: {state(), runner_state()} | nil
+
   @doc """
   Calculate nextstep under model related paramater,
   model state, input(such as inject current or meterial)
