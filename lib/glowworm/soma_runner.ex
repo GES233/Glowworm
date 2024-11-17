@@ -33,7 +33,7 @@ defmodule Glowworm.SomaRunner do
   alias Glowworm.Runners.Soma.RunnerState
   alias :gen_statem, as: GenStateM
   # About gen_statem, see:
-  # https://meraj-gearhead.ca/state-machine-in-elixir-using-erlangs-genstatem-behaviour
+  # https://itnext.io/state-machine-in-elixir-using-erlangs-gen-statem-behaviour-2bf99350d33e
 
   @behaviour GenStateM
 
@@ -194,7 +194,7 @@ defmodule Glowworm.SomaRunner do
 end
 
 defmodule Glowworm.SomaRunner.InputAgent do
-  use Glowworm.Runners, :agent
+  use Agent
 end
 
 defmodule Glowworm.SomaRunner.StateAgent do

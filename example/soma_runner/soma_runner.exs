@@ -1,6 +1,4 @@
-# alias Glowworm, as: G
-alias Glowworm.SomaRunner, as: SR
-# alias :gen_statem, as: GenStateM
+alias Glowworm.Runners.Soma
 
 defmodule CurrentInjector do
   use Agent
