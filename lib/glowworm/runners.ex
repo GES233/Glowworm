@@ -6,7 +6,7 @@ defmodule Glowworm.Runners do
   # As data container.
   def agent do
     quote do
-      import Glowworm.Runners, except: [runner: 0]
+      import Glowworm.Runners, except: [runner: 0, loop: 0]
 
       use Agent
 
@@ -14,10 +14,18 @@ defmodule Glowworm.Runners do
     end
   end
 
+  def loop do
+    quote do
+      import Glowworm.Runners, except: [runner: 0, agent: 0]
+
+      use GenServer
+    end
+  end
+
   def runner do
     quote do
       # Glowworm.Runners.agent/0 only used when as Agent.
-      import Glowworm.Runners, except: [agent: 0]
+      import Glowworm.Runners, except: [agent: 0, loop: 0]
 
       alias Glowworm.NeuronID, as: ID
       alias :gen_statem, as: GenStateM

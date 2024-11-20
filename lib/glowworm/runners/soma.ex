@@ -59,7 +59,9 @@ defmodule Glowworm.Runners.Soma do
 
   @impl true
   def init(args) do
-    {:ok, :idle, build_init_state(args)}
+    # https://andrealeopardi.com/posts/connection-managers-with-gen-statem/
+    actions = [{:next_event, :internal, :connect}]
+    {:ok, :idle, build_init_state(args), actions}
   end
 
   @impl true
@@ -68,6 +70,11 @@ defmodule Glowworm.Runners.Soma do
   end
 
   ## State callbacks
+
+  # idle
+  def idle(:internal, :connect, _data) do
+    # ...
+  end
 end
 
 defmodule Glowworm.Runners.Soma.RunnerState do
@@ -93,10 +100,12 @@ end
 
 defmodule Glowworm.Runners.Soma.RunnerLoop do
   @moduledoc """
-  Agent container to store state.
+  Agent container to store state and execute loop.
+
+  Spawned when Soma Runner initialized.
   """
-  alias Glowworm.Runners, as: Runner
-  use Runner, :agent
+  # alias Glowworm.Runners, as: Runner
+  # use Runner, :loop
 end
 
 defmodule Glowworm.Runners.Soma.P do
